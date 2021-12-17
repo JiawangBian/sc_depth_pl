@@ -1,0 +1,14 @@
+pytorch-lightning==1.4.0
+matplotlib
+opencv-python
+tqdm
+imageio
+path
+scipy
+test-tube
+configargparse
+
+# conda create -n sc_depth_env python=3.6
+# conda activate sc_depth_env
+# conda install pytorch==1.6.0 torchvision==0.7.0 cudatoolkit=10.2 -c pytorch
+# pip install -r requirements.txt

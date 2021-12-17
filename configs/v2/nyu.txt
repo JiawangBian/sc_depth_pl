@@ -1,0 +1,14 @@
+exp_name = nyu_scv2
+
+dataset_name = nyu
+
+model_version = v2
+resnet_layers = 18
+
+lr = 1e-4
+batch_size = 8
+num_epochs = 100
+epoch_size = 1000
+
+rot_t_weight = 0.5
+rot_c_weight = 0.1
