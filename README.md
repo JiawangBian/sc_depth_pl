@@ -107,10 +107,10 @@ which is an extension of previous conference version:
 *Jia-Wang Bian, Huangying Zhan, Naiyan Wang, Tat-Jun Chin, Chunhua Shen, Ian Reid*
 [**[paper]**](https://arxiv.org/abs/2006.02708v2)
 ```
-@article{bian2022tpami, 
+@article{bian2021tpami, 
   title={Auto-Rectify Network for Unsupervised Indoor Depth Estimation}, 
   author={Bian, Jia-Wang and Zhan, Huangying and Wang, Naiyan and Chin, Tat-Jin and Shen, Chunhua and Reid, Ian}, 
   journal= {IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI)}, 
-  year={2022} 
+  year={2021} 
 }
 ```
