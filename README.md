@@ -60,6 +60,15 @@ We provide "scripts/run_test.sh", which shows how test on kitti and nyu.
 
 We provide "scripts/run_inference.sh", which shows how to save depths (.npy) and visualization results (.jpg). 
 
+A demo is given here. You can put your images in "demo/input/" folder and run
+```bash
+python inference.py --config configs/v2/nyu.txt \
+--input_dir demo/input/ \
+--output_dir demo/output/ \
+--ckpt_path ckpts/nyu_scv2/version_10/epoch=101-val_loss=0.1580.ckpt \
+--save-vis --save-depth
+```
+and find the results in "demo/output/" folder.
 
 ## Pretrained models
 
