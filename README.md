@@ -43,6 +43,11 @@ You can convert it by yourself (on your own video data) or download our pre-proc
 
 We provide "scripts/run_train.sh", which shows how to train on kitti and nyu.
 
+Then you can start a `tensorboard` session in this folder by
+```bash
+tensorboard --logdir=ckpts/
+```
+and visualize the training progress by opening [https://localhost:6006](https://localhost:6006) on your browser. 
 
 
 ## Testing
