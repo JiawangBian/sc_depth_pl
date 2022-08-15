@@ -1,11 +1,7 @@
 import numpy as np
 import torch
 from pytorch_lightning import LightningModule
-from torch.utils.data import DataLoader
 
-import datasets.custom_transforms as custom_transforms
-from datasets.train_folders import TrainFolder
-from datasets.validation_folders import ValidationSet
 from losses.loss_functions import (compute_errors, compute_smooth_loss,
                                    photo_and_geometry_loss)
 from models.DepthNet import DepthNet
@@ -21,58 +17,6 @@ class SC_Depth(LightningModule):
         # model
         self.depth_net = DepthNet(self.hparams.hparams.resnet_layers)
         self.pose_net = PoseNet()
-
-    def prepare_data(self):
-        if self.hparams.hparams.dataset_name == 'kitti':
-            training_size = [256, 832]
-        elif self.hparams.hparams.dataset_name == 'ddad':
-            training_size = [384, 640]
-        else:
-            print('unknown dataset type')
-
-        # data loader
-        train_transform = custom_transforms.Compose([
-            custom_transforms.RandomHorizontalFlip(),
-            custom_transforms.RandomScaleCrop(),
-            custom_transforms.RescaleTo(training_size),
-            custom_transforms.ArrayToTensor(),
-            custom_transforms.Normalize()]
-        )
-        valid_transform = custom_transforms.Compose([
-            custom_transforms.RescaleTo(training_size),
-            custom_transforms.ArrayToTensor(),
-            custom_transforms.Normalize()]
-        )
-
-        self.train_dataset = TrainFolder(
-            self.hparams.hparams.dataset_dir,
-            transform=train_transform,
-            train=True,
-            sequence_length=self.hparams.hparams.sequence_length,
-            skip_frames=self.hparams.hparams.skip_frames,
-            dataset=self.hparams.hparams.dataset_name
-        )
-
-        if self.hparams.hparams.val_mode == 'depth':
-            self.val_dataset = ValidationSet(
-                self.hparams.hparams.dataset_dir,
-                transform=valid_transform,
-                dataset=self.hparams.hparams.dataset_name
-            )
-        elif self.hparams.hparams.val_mode == 'photo':
-            self.val_dataset = TrainFolder(
-                self.hparams.hparams.dataset_dir,
-                transform=valid_transform,
-                train=False,
-                sequence_length=self.hparams.hparams.sequence_length,
-                skip_frames=self.hparams.hparams.skip_frames,
-                dataset=self.hparams.hparams.dataset_name
-            )
-        else:
-            print("wrong validation mode")
-
-        print('{} samples found for training'.format(len(self.train_dataset)))
-        print('{} samples found for validatioin'.format(len(self.val_dataset)))
 
     def inference_depth(self, img):
         pred_depth = self.depth_net(img)
@@ -99,20 +43,6 @@ class SC_Depth(LightningModule):
         ]
         optimizer = torch.optim.Adam(optim_params)
         return [optimizer]
-
-    def train_dataloader(self):
-        return DataLoader(self.train_dataset,
-                          shuffle=True,
-                          num_workers=4,
-                          batch_size=self.hparams.hparams.batch_size,
-                          pin_memory=True)
-
-    def val_dataloader(self):
-        return DataLoader(self.val_dataset,
-                          shuffle=False,
-                          num_workers=4,
-                          batch_size=self.hparams.hparams.batch_size,
-                          pin_memory=True)
 
     def training_step(self, batch, batch_idx):
         # training_step defined the train loop. It is independent of forward

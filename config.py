@@ -68,3 +68,17 @@ def get_opts():
                         help='save depth with factor 1000')
 
     return parser.parse_args()
+
+
+def get_training_size(dataset_name):
+
+    if dataset_name == 'kitti':
+        training_size = [256, 832]
+    elif dataset_name == 'ddad':
+        training_size = [384, 640]
+    elif dataset_name == 'nyu':
+        training_size = [256, 320]
+    else:
+        print('unknown dataset type')
+
+    return training_size

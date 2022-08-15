@@ -4,7 +4,7 @@ import torch
 from torch.utils.data import DataLoader
 
 # pytorch-lightning
-from config import get_opts
+from config import get_opts, get_training_size
 
 from SC_Depth import SC_Depth
 from SC_DepthV2 import SC_DepthV2
@@ -30,13 +30,8 @@ def main():
     model.cuda()
     model.eval()
 
-    # dataset
-    if hparams.dataset_name == 'nyu':
-        training_size = [256, 320]
-    elif hparams.dataset_name == 'kitti':
-        training_size = [256, 832]
-    elif hparams.dataset_name == 'ddad':
-        training_size = [384, 640]
+    # get training resolution
+    training_size = get_training_size(hparams.dataset_name)
 
     # data loader
     test_transform = custom_transforms.Compose([

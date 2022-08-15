@@ -20,7 +20,7 @@ class TrainFolder(data.Dataset):
         transform functions must take in a list a images and a numpy array (usually intrinsics matrix)
     """
 
-    def __init__(self, root, train=True, sequence_length=3, transform=None, skip_frames=1, dataset='kitti'):
+    def __init__(self, root, train=True, sequence_length=3, transform=None, skip_frames=1):
         np.random.seed(0)
         random.seed(0)
         self.root = Path(root)/'training'
@@ -28,7 +28,6 @@ class TrainFolder(data.Dataset):
         self.scenes = [self.root/folder[:-1]
                        for folder in open(scene_list_path)]
         self.transform = transform
-        self.dataset = dataset
         self.k = skip_frames
         self.crawl_folders(sequence_length)
 
