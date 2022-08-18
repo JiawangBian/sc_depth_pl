@@ -4,8 +4,7 @@ import torch
 from pytorch_lightning import LightningModule
 
 from losses.inverse_warp import inverse_rotation_warp
-from losses.loss_functions import (compute_errors, compute_smooth_loss,
-                                   photo_and_geometry_loss)
+import losses.loss_functions as LossF
 from models.DepthNet import DepthNet
 from models.PoseNet import PoseNet
 from models.RectifyNet import RectifyNet
@@ -22,13 +21,6 @@ class SC_DepthV2(LightningModule):
         self.pose_net = PoseNet()
         self.rectify_net = RectifyNet()
 
-    def inference_depth(self, img):
-        pred_depth = self.depth_net(img)
-        return pred_depth
-
-    def inference_pose(self, img1, img2):
-        pred_pose = self.pose_net(img1, img2)
-        return pred_pose
 
     def rectify_imgs(self, tgt_img, ref_imgs, intrinsics):
 
@@ -67,19 +59,7 @@ class SC_DepthV2(LightningModule):
 
         return ref_imgs_warped, loss_rot_consistency, loss_rot_triplet, rot1.abs().mean(), rot2.abs().mean()
 
-    def forward(self, tgt_img, ref_imgs, intrinsics):
-        # in lightning, forward defines the prediction/inference actions for training
-        tgt_depth = self.inference_depth(tgt_img)
-        ref_imgs_warped, loss_rc, loss_rt, rot_before, rot_after = self.rectify_imgs(
-            tgt_img, ref_imgs, intrinsics)
-
-        ref_depths = [self.inference_depth(im) for im in ref_imgs_warped]
-        poses = [self.inference_pose(tgt_img, im) for im in ref_imgs_warped]
-        poses_inv = [self.inference_pose(im, tgt_img)
-                     for im in ref_imgs_warped]
-
-        return tgt_depth, ref_depths, poses, poses_inv, ref_imgs_warped, loss_rc, loss_rt, rot_before, rot_after
-
+  
     def configure_optimizers(self):
         optim_params = [
             {'params': self.depth_net.parameters(), 'lr': self.hparams.hparams.lr},
@@ -91,22 +71,16 @@ class SC_DepthV2(LightningModule):
         return [optimizer]
 
     def training_step(self, batch, batch_idx):
-        # training_step defined the train loop. It is independent of forward
         tgt_img, ref_imgs, intrinsics = batch
 
         # network forward
-        (tgt_depth,
-         ref_depths,
-         poses, 
-         poses_inv,
-         ref_imgs_warped,
-         loss_rc, 
-         loss_rt,
-         rot_before,
-         rot_after) = self(
-            tgt_img,
-            ref_imgs,
-            intrinsics)
+        tgt_depth = self.depth_net(tgt_img)
+        ref_imgs_warped, loss_rc, loss_rt, rot_before, rot_after = self.rectify_imgs(
+            tgt_img, ref_imgs, intrinsics)
+
+        ref_depths = [self.depth_net(im) for im in ref_imgs_warped]
+        poses = [self.pose_net(tgt_img, im) for im in ref_imgs_warped]
+        poses_inv = [self.pose_net(im, tgt_img) for im in ref_imgs_warped]
 
         # compute loss
         w1 = self.hparams.hparams.photo_weight
@@ -115,9 +89,9 @@ class SC_DepthV2(LightningModule):
         w4 = self.hparams.hparams.rot_c_weight
         w5 = self.hparams.hparams.rot_t_weight
 
-        loss_1, loss_2 = photo_and_geometry_loss(tgt_img, ref_imgs_warped, tgt_depth, ref_depths,
+        loss_1, loss_2 = LossF.photo_and_geometry_loss(tgt_img, ref_imgs_warped, tgt_depth, ref_depths,
                                                  intrinsics, poses, poses_inv, self.hparams.hparams)
-        loss_3 = compute_smooth_loss(tgt_depth, tgt_img)
+        loss_3 = LossF.compute_smooth_loss(tgt_depth, tgt_img)
 
         loss = w1*loss_1 + w2*loss_2 + w3*loss_3 + w4*loss_rc + w5*loss_rt
 
@@ -147,19 +121,12 @@ class SC_DepthV2(LightningModule):
 
         if self.hparams.hparams.val_mode == 'depth':
             tgt_img, gt_depth = batch
-            tgt_depth = self.inference_depth(tgt_img)
-            errs = compute_errors(gt_depth, tgt_depth,
+            tgt_depth = self.depth_net(tgt_img)
+            errs = LossF.compute_errors(gt_depth, tgt_depth,
                                   self.hparams.hparams.dataset_name)
 
             errs = {'abs_diff': errs[0], 'abs_rel': errs[1],
                     'a1': errs[6], 'a2': errs[7], 'a3': errs[8]}
-
-        elif self.hparams.hparams.val_mode == 'photo':
-            tgt_img, ref_imgs, intrinsics = batch
-            tgt_depth, ref_depths, poses, poses_inv = self(tgt_img, ref_imgs)
-            loss_1, loss_2 = photo_and_geometry_loss(tgt_img, ref_imgs, tgt_depth, ref_depths,
-                                                     intrinsics, poses, poses_inv)
-            errs = {'photo_loss': loss_1.item(), 'geometry_loss': loss_2.item()}
         else:
             print('wrong validation mode')
 
@@ -193,6 +160,3 @@ class SC_DepthV2(LightningModule):
             self.log('val/a2', mean_a2, on_epoch=True)
             self.log('val/a3', mean_a3, on_epoch=True)
 
-        elif self.hparams.hparams.val_mode == 'photo':
-            mean_pl = np.array([x['photo_loss'] for x in outputs]).mean()
-            self.log('val_loss', mean_pl, prog_bar=True)

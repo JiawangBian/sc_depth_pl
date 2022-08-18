@@ -5,7 +5,7 @@ from imageio import imread, imwrite
 from path import Path
 import os
 
-from config import get_opts
+from config import get_opts, get_training_size
 
 from SC_Depth import SC_Depth
 from SC_DepthV2 import SC_DepthV2
@@ -24,17 +24,14 @@ def main():
     elif hparams.model_version == 'v2':
         system = SC_DepthV2(hparams)
 
-    model = system.load_from_checkpoint(hparams.ckpt_path)
+    system = system.load_from_checkpoint(hparams.ckpt_path, strict=False)
+
+    model = system.depth_net
     model.cuda()
     model.eval()
 
     # training size
-    if hparams.dataset_name == 'nyu':
-        training_size = [256, 320]
-    elif hparams.dataset_name == 'kitti':
-        training_size = [256, 832]
-    elif hparams.dataset_name == 'ddad':
-        training_size = [384, 640]
+    training_size = get_training_size(hparams.dataset_name)
 
     # normaliazation
     inference_transform = custom_transforms.Compose([
@@ -66,7 +63,7 @@ def main():
 
         img = imread(img_file).astype(np.float32)
         tensor_img = inference_transform([img])[0][0].unsqueeze(0).cuda()
-        pred_depth = model.inference_depth(tensor_img)
+        pred_depth = model(tensor_img)
 
         if hparams.save_vis:
             vis = visualize_depth(pred_depth[0, 0]).permute(

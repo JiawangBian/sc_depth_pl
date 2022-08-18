@@ -26,7 +26,9 @@ def main():
         system = SC_Depth(hparams)
     elif hparams.model_version == 'v2':
         system = SC_DepthV2(hparams)
-    model = system.load_from_checkpoint(hparams.ckpt_path)
+    system = system.load_from_checkpoint(hparams.ckpt_path, strict=False)
+
+    model = system.depth_net
     model.cuda()
     model.eval()
 
@@ -55,7 +57,7 @@ def main():
 
     all_errs = []
     for i, (tgt_img, gt_depth) in enumerate(tqdm(test_loader)):
-        pred_depth = model.inference_depth(tgt_img.cuda())
+        pred_depth = model(tgt_img.cuda())
 
         errs = compute_errors(gt_depth.cuda(), pred_depth,
                               hparams.dataset_name)

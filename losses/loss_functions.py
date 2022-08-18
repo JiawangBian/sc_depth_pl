@@ -4,7 +4,7 @@ from torch import nn
 import torch.nn.functional as F
 import numpy as np
 
-from .inverse_warp import inverse_warp2
+from .inverse_warp import inverse_warp
 
 device = torch.device(
     "cuda") if torch.cuda.is_available() else torch.device("cpu")
@@ -93,7 +93,7 @@ def photo_and_geometry_loss(tgt_img, ref_imgs, tgt_depth, ref_depths, intrinsics
 
 def compute_pairwise_loss(tgt_img, ref_img, tgt_depth, ref_depth, pose, intrinsic, hparams):
 
-    ref_img_warped, projected_depth, computed_depth = inverse_warp2(
+    ref_img_warped, projected_depth, computed_depth = inverse_warp(
         ref_img, tgt_depth, ref_depth, pose, intrinsic, padding_mode='zeros')
 
     diff_depth = (computed_depth-projected_depth).abs() / \
@@ -175,7 +175,7 @@ def compute_errors(gt, pred, dataset):
     batch_size, h, w = gt.size()
 
     if pred.nelement() != gt.nelement():
-        pred = F.interpolate(pred, [h, w], mode='nearest')
+        pred = F.interpolate(pred, [h, w], mode='bilinear', align_corners=False)
 
     pred = pred.view(batch_size, h, w)
 
@@ -197,7 +197,7 @@ def compute_errors(gt, pred, dataset):
         crop_mask[:, :] = 1
         max_depth = 200
 
-    min_depth = 1e-3
+    min_depth = 0.1
     for current_gt, current_pred in zip(gt, pred):
         valid = (current_gt > min_depth) & (current_gt < max_depth)
         valid = valid & crop_mask

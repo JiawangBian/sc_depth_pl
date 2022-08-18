@@ -53,7 +53,7 @@ if __name__ == '__main__':
     # restore from previous checkpoints
     if hparams.ckpt_path is not None:
         print('load pre-trained model from {}'.format(hparams.ckpt_path))
-        system = system.load_from_checkpoint(hparams.ckpt_path, hparams=hparams)
+        system = system.load_from_checkpoint(hparams.ckpt_path, strict=False, hparams=hparams)
 
     # set up trainer
     trainer = Trainer(max_epochs=hparams.num_epochs,
