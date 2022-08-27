@@ -41,7 +41,7 @@ class SC_Depth(LightningModule):
         w3 = self.hparams.hparams.smooth_weight
 
         loss_1, loss_2 = LossF.photo_and_geometry_loss(tgt_img, ref_imgs, tgt_depth, ref_depths,
-                                                 intrinsics, poses, poses_inv, self.hparams.hparams)
+                                                       intrinsics, poses, poses_inv, self.hparams.hparams)
         loss_3 = LossF.compute_smooth_loss(tgt_depth, tgt_img)
 
         loss = w1*loss_1 + w2*loss_2 + w3*loss_3
@@ -60,7 +60,7 @@ class SC_Depth(LightningModule):
             tgt_img, gt_depth = batch
             tgt_depth = self.depth_net(tgt_img)
             errs = LossF.compute_errors(gt_depth, tgt_depth,
-                                  self.hparams.hparams.dataset_name)
+                                        self.hparams.hparams.dataset_name)
 
             errs = {'abs_diff': errs[0], 'abs_rel': errs[1],
                     'a1': errs[6], 'a2': errs[7], 'a3': errs[8]}
@@ -74,8 +74,8 @@ class SC_Depth(LightningModule):
             poses_inv = [self.pose_net(im, tgt_img) for im in ref_imgs]
 
             loss_1, loss_2 = LossF.photo_and_geometry_loss(tgt_img, ref_imgs, tgt_depth, ref_depths,
-                                                     intrinsics, poses, poses_inv)
-            errs = {'photo_loss': loss_1.item(), 'geometry_loss': loss_2.item()}
+                                                           intrinsics, poses, poses_inv, self.hparams.hparams)
+            errs = {'photo_loss': loss_1.item()}
         else:
             print('wrong validation mode')
 

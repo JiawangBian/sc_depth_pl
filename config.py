@@ -28,13 +28,13 @@ def get_opts():
     parser.add_argument('--photo_weight', type=float,
                         default=1.0, help='photometric loss weight')
     parser.add_argument('--geometry_weight', type=float,
-                        default=0.5, help='geometry loss weight')
+                        default=1.0, help='geometry loss weight')
     parser.add_argument('--smooth_weight', type=float,
-                        default=0.1, help='smoothness loss weight')
+                        default=1.0, help='smoothness loss weight')
     parser.add_argument('--rot_t_weight', type=float,
-                        default=0.5, help='rotation triplet loss weight')
+                        default=1.0, help='rotation triplet loss weight')
     parser.add_argument('--rot_c_weight', type=float,
-                        default=0.1, help='rotation consistency loss weight')
+                        default=1.0, help='rotation consistency loss weight')
     parser.add_argument('--val_mode', type=str, default='depth',
                         choices=['photo', 'depth'], help='how to run validation')
 
