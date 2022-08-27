@@ -140,7 +140,7 @@ class SC_DepthV2(LightningModule):
             poses = [self.pose_net(tgt_img, im) for im in ref_imgs_warped]
             poses_inv = [self.pose_net(im, tgt_img) for im in ref_imgs_warped]
 
-            loss_1, loss_2 = LossF.photo_and_geometry_loss(tgt_img, ref_imgs, tgt_depth, ref_depths,
+            loss_1, loss_2 = LossF.photo_and_geometry_loss(tgt_img, ref_imgs_warped, tgt_depth, ref_depths,
                                                            intrinsics, poses, poses_inv, self.hparams.hparams)
             errs = {'photo_loss': loss_1.item()}
         else:
