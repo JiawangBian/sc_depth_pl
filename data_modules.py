@@ -38,7 +38,8 @@ class VideosDataModule(LightningDataModule):
             transform=self.train_transform,
             train=True,
             sequence_length=self.hparams.hparams.sequence_length,
-            skip_frames=self.hparams.hparams.skip_frames
+            skip_frames=self.hparams.hparams.skip_frames,
+            use_frame_index=self.hparams.hparams.use_frame_index
         )
 
         if self.hparams.hparams.val_mode == 'depth':
@@ -53,7 +54,8 @@ class VideosDataModule(LightningDataModule):
                 transform=self.valid_transform,
                 train=False,
                 sequence_length=self.hparams.hparams.sequence_length,
-                skip_frames=self.hparams.hparams.skip_frames
+                skip_frames=self.hparams.hparams.skip_frames,
+                use_frame_index=self.hparams.hparams.use_frame_index
             )
         else:
             print("wrong validation mode")

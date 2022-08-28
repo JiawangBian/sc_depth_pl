@@ -3,6 +3,7 @@ import numpy as np
 from imageio import imread
 from path import Path
 import random
+import os
 
 
 def load_as_float(path):
@@ -20,7 +21,7 @@ class TrainFolder(data.Dataset):
         transform functions must take in a list a images and a numpy array (usually intrinsics matrix)
     """
 
-    def __init__(self, root, train=True, sequence_length=3, transform=None, skip_frames=1):
+    def __init__(self, root, train=True, sequence_length=3, transform=None, skip_frames=1, use_frame_index=False):
         np.random.seed(0)
         random.seed(0)
         self.root = Path(root)/'training'
@@ -29,6 +30,7 @@ class TrainFolder(data.Dataset):
                        for folder in open(scene_list_path)]
         self.transform = transform
         self.k = skip_frames
+        self.use_frame_index = use_frame_index
         self.crawl_folders(sequence_length)
 
     def crawl_folders(self, sequence_length):
@@ -42,6 +44,12 @@ class TrainFolder(data.Dataset):
             intrinsics = np.genfromtxt(
                 scene/'cam.txt').astype(np.float32).reshape((3, 3))
             imgs = sorted(scene.files('*.jpg'))
+
+            if self.use_frame_index:
+                assert (os.path.exists(scene/'frame_index.txt') == True)
+                frame_index = [int(index)
+                               for index in open(scene/'frame_index.txt')]
+                imgs = [imgs[d] for d in frame_index]
 
             if len(imgs) < sequence_length:
                 continue

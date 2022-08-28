@@ -16,6 +16,8 @@ def get_opts():
                         default=3, help='number of images for training')
     parser.add_argument('--skip_frames', type=int, default=1,
                         help='jump sampling from video')
+    parser.add_argument('--use_frame_index', action='store_true',
+                        help='filter out static-camera frames in video')
 
     # model
     parser.add_argument('--model_version', type=str,
