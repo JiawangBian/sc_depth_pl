@@ -35,9 +35,29 @@ We organize the video datasets into the following format for training and testin
       -Testing
         --color (containg testing images)
         --depth (containg ground-truth depths)
-You can convert your own video datasets into the above format for use. We provide the pre-processed standard datasets:
+
+We provide the pre-processed standard datasets:
 
 [**[kitti_raw]**](https://1drv.ms/u/s!AiV6XqkxJHE2mUax6F2N-rjAs43R?e=gwn6Zi) [**[nyu]**](https://1drv.ms/u/s!AiV6XqkxJHE2mUUA5hElvhZXnqOn?e=51SIE1) [**more datasets are ongoing**]
+
+
+## Your Own Dataset
+
+You need re-organize your own video datasets according to the above mentioned format. Then, you may meet two problems: (1) no ground-truth depth for validation, and (2) hard to choose an appropriate frame rate (FPS) to downsample videos.
+
+For (1), just add "--val_mode photo" in the training script or the configure file, which uses the photometric loss for validation. 
+```bash
+python train.py --config $CONFIG --dataset_dir $DATASET --val_mode photo
+```
+
+For (2), we provide a script ("generate_valid_frame_index.py"), which computes and saves a "frame_index.txt" in each training scene. You can call it by running
+```bash
+python generate_valid_frame_index.py --dataset_dir $DATASET
+```
+Then, you can add "--use_frame_index" in the training script or the configure file to train models on the filtered frames.
+```bash
+python train.py --config $CONFIG --dataset_dir $DATASET --use_frame_index
+```
 
 
 ## Inference
@@ -56,9 +76,9 @@ You will see the results saved in "demo/output/" folder.
 ## Training
 
 We provide a bash script ("scripts/run_train.sh"), which shows how to train on kitti and nyu datasets. Generally, you need edit the config file (e.g., "configs/v1/kitti.txt") based on your devices and run
-
-    python train.py --config $CONFIG --dataset_dir $DATASET
-
+```bash
+python train.py --config $CONFIG --dataset_dir $DATASET
+```
 Then you can start a `tensorboard` session in this folder by running
 ```bash
 tensorboard --logdir=ckpts/
