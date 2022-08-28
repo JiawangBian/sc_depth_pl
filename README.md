@@ -1,4 +1,4 @@
-# SC_Depth_pl:
+# SC_Depth:
 
 This repo provides the pytorch lightning implementation of **SC-Depth** (V1, V2, and ongoing V3) for **self-supervised learning of monocular depth from video**.
 
