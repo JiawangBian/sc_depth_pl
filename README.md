@@ -41,9 +41,22 @@ We provide the pre-processed standard datasets:
 [**[kitti_raw]**](https://1drv.ms/u/s!AiV6XqkxJHE2mUax6F2N-rjAs43R?e=gwn6Zi) [**[nyu]**](https://1drv.ms/u/s!AiV6XqkxJHE2mUUA5hElvhZXnqOn?e=51SIE1) [**more datasets are ongoing**]
 
 
-## Your Own Dataset
+## Training
 
-You need re-organize your own video datasets according to the above mentioned format. Then, you may meet two problems: (1) no ground-truth depth for validation, and (2) hard to choose an appropriate frame rate (FPS) to downsample videos.
+We provide a bash script ("scripts/run_train.sh"), which shows how to train on kitti and nyu datasets. Generally, you need edit the config file (e.g., "configs/v1/kitti.txt") based on your devices and run
+```bash
+python train.py --config $CONFIG --dataset_dir $DATASET
+```
+Then you can start a `tensorboard` session in this folder by running
+```bash
+tensorboard --logdir=ckpts/
+```
+By opening [https://localhost:6006](https://localhost:6006) on your browser, you can watch the training progress.  
+
+
+## Train on Your Own Data
+
+You need re-organize your own video datasets according to the above mentioned format for training. Then, you may meet two problems: (1) no ground-truth depth for validation, and (2) hard to choose an appropriate frame rate (FPS) to downsample videos.
 
 For (1), just add "--val_mode photo" in the training script or the configure file, which uses the photometric loss for validation. 
 ```bash
@@ -60,6 +73,13 @@ python train.py --config $CONFIG --dataset_dir $DATASET --use_frame_index
 ```
 
 
+## Testing
+
+We provide the script ("scripts/run_test.sh"), which shows how to test on kitti and nyu datasets.
+
+    python test.py --config $CONFIG --dataset_dir $DATASET --ckpt_path $CKPT
+
+
 ## Inference
 
 We provide a bash script ("scripts/run_inference.sh"), which shows how to save the predicted depth (.npy) and visualize it using a color image (.jpg).
@@ -72,25 +92,6 @@ python inference.py --config configs/v2/nyu.txt \
 --save-vis --save-depth
 ```
 You will see the results saved in "demo/output/" folder.
-
-## Training
-
-We provide a bash script ("scripts/run_train.sh"), which shows how to train on kitti and nyu datasets. Generally, you need edit the config file (e.g., "configs/v1/kitti.txt") based on your devices and run
-```bash
-python train.py --config $CONFIG --dataset_dir $DATASET
-```
-Then you can start a `tensorboard` session in this folder by running
-```bash
-tensorboard --logdir=ckpts/
-```
-By opening [https://localhost:6006](https://localhost:6006) on your browser, you can watch the training progress.  
-
-
-## Testing
-
-We provide the script ("scripts/run_test.sh"), which shows how to test on kitti and nyu datasets.
-
-    python test.py --config $CONFIG --dataset_dir $DATASET --ckpt_path $CKPT
 
 
 ## Pretrained models
