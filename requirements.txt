@@ -1,4 +1,4 @@
-pytorch-lightning==1.4.0
+pytorch-lightning==1.7.3
 matplotlib
 opencv-python
 tqdm

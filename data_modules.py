@@ -1,29 +1,18 @@
 from pytorch_lightning import LightningDataModule
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, RandomSampler
 
 import datasets.custom_transforms as custom_transforms
+from config import get_training_size
 from datasets.train_folders import TrainFolder
 from datasets.validation_folders import ValidationSet
 
 
 class VideosDataModule(LightningDataModule):
 
-    def __init__(self, dataset_dir,
-                 dataset_name='kitti',
-                 training_size=[256, 320],
-                 sequence_length=3,
-                 skip_frames=1,
-                 batch_size=4,
-                 val_mode='depth'
-                 ):
+    def __init__(self, hparams):
         super().__init__()
-        self.dataset_dir = dataset_dir
-        self.sequence_length = sequence_length
-        self.skip_frames = skip_frames
-        self.training_size = training_size
-        self.batch_size = batch_size
-        self.val_mode = val_mode
-        self.dataset_name = dataset_name
+        self.save_hyperparameters()
+        self.training_size = get_training_size(hparams.dataset_name)
 
         # data loader
         self.train_transform = custom_transforms.Compose([
@@ -45,26 +34,26 @@ class VideosDataModule(LightningDataModule):
     def setup(self, stage=None):
 
         self.train_dataset = TrainFolder(
-            self.dataset_dir,
+            self.hparams.hparams.dataset_dir,
             transform=self.train_transform,
             train=True,
-            sequence_length=self.sequence_length,
-            skip_frames=self.skip_frames
+            sequence_length=self.hparams.hparams.sequence_length,
+            skip_frames=self.hparams.hparams.skip_frames
         )
 
-        if self.val_mode == 'depth':
+        if self.hparams.hparams.val_mode == 'depth':
             self.val_dataset = ValidationSet(
-                self.dataset_dir,
+                self.hparams.hparams.dataset_dir,
                 transform=self.valid_transform,
-                dataset=self.dataset_name
+                dataset=self.hparams.hparams.dataset_name
             )
-        elif self.val_mode == 'photo':
+        elif self.hparams.hparams.val_mode == 'photo':
             self.val_dataset = TrainFolder(
-                self.dataset_dir,
+                self.hparams.hparams.dataset_dir,
                 transform=self.valid_transform,
                 train=False,
-                sequence_length=self.sequence_length,
-                skip_frames=self.skip_frames
+                sequence_length=self.hparams.hparams.sequence_length,
+                skip_frames=self.hparams.hparams.skip_frames
             )
         else:
             print("wrong validation mode")
@@ -73,15 +62,18 @@ class VideosDataModule(LightningDataModule):
         print('{} samples found for validatioin'.format(len(self.val_dataset)))
 
     def train_dataloader(self):
+        sampler = RandomSampler(self.train_dataset,
+                                replacement=True,
+                                num_samples=self.hparams.hparams.batch_size * self.hparams.hparams.epoch_size)
         return DataLoader(self.train_dataset,
-                          shuffle=True,
+                          sampler=sampler,
                           num_workers=4,
-                          batch_size=self.batch_size,
+                          batch_size=self.hparams.hparams.batch_size,
                           pin_memory=True)
 
     def val_dataloader(self):
         return DataLoader(self.val_dataset,
                           shuffle=False,
                           num_workers=4,
-                          batch_size=self.batch_size,
+                          batch_size=self.hparams.hparams.batch_size,
                           pin_memory=True)

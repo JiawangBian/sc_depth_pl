@@ -56,8 +56,6 @@ def get_opts():
     parser.add_argument('--num_epochs', type=int, default=100,
                         help='number of training epochs')
     parser.add_argument('--lr', type=float, default=1e-4, help='learning rate')
-    parser.add_argument('--num_gpus', type=int,
-                        default=1, help='number of gpus')
 
     # inference options
     parser.add_argument('--input_dir', type=str, help='input image path')
