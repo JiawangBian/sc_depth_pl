@@ -12,9 +12,9 @@ In the SC-DepthV2 ([TPMAI 2022](https://arxiv.org/abs/2006.02708v2)), we prove t
 
 ## Install
 ```
-conda create -n sc_depth_env python=3.6
+conda create -n sc_depth_env python=3.8
 conda activate sc_depth_env
-conda install pytorch==1.6.0 torchvision==0.7.0 cudatoolkit=10.2 -c pytorch
+conda install pytorch torchvision -c pytorch
 pip install -r requirements.txt
 ```
 
@@ -127,6 +127,7 @@ More pretrained models on more datasets will be provided!
 }
 ```
 which is an extension of previous conference version:
+
 **Unsupervised Scale-consistent Depth and Ego-motion Learning from Monocular Video (NeurIPS 2019)** \
 *Jia-Wang Bian, Zhichao Li, Naiyan Wang, Huangying Zhan, Chunhua Shen, Ming-Ming Cheng, Ian Reid* 
 [**[paper]**](https://papers.nips.cc/paper/2019/file/6364d3f0f495b6ab9dcf8d3b5c6e0b01-Paper.pdf)
