@@ -11,7 +11,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torchvision.models as models
-import torch.utils.model_zoo as model_zoo
+
 
 class ResNetMultiImageInput(models.ResNet):
     """Constructs a resnet model with varying number of input images.
@@ -55,9 +55,10 @@ def resnet_multiimage_input(num_layers, pretrained=False, num_input_images=1):
         block_type, blocks, num_input_images=num_input_images)
 
     if pretrained:
-        loaded = model_zoo.load_url(
+        loaded = torch.hub.load_state_dict_from_url(
             models.resnet.model_urls['resnet{}'.format(num_layers)])
-        loaded['conv1.weight'] = torch.cat([loaded['conv1.weight']] * num_input_images, 1) / num_input_images
+        loaded['conv1.weight'] = torch.cat(
+            [loaded['conv1.weight']] * num_input_images, 1) / num_input_images
         model.load_state_dict(loaded)
     return model
 
@@ -85,7 +86,10 @@ class ResnetEncoder(nn.Module):
             self.encoder = resnet_multiimage_input(
                 num_layers, pretrained, num_input_images)
         else:
-            self.encoder = resnets[num_layers](pretrained)
+            if pretrained:
+                self.encoder = resnets[num_layers](weights="IMAGENET1K_V1")
+            else:
+                self.encoder = resnets[num_layers]()
 
         if num_layers > 34:
             self.num_ch_enc[1:] *= 4
@@ -96,7 +100,8 @@ class ResnetEncoder(nn.Module):
         x = self.encoder.conv1(x)
         x = self.encoder.bn1(x)
         self.features.append(self.encoder.relu(x))
-        self.features.append(self.encoder.layer1(self.encoder.maxpool(self.features[-1])))
+        self.features.append(self.encoder.layer1(
+            self.encoder.maxpool(self.features[-1])))
         self.features.append(self.encoder.layer2(self.features[-1]))
         self.features.append(self.encoder.layer3(self.features[-1]))
         self.features.append(self.encoder.layer4(self.features[-1]))

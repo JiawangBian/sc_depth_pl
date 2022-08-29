@@ -1,6 +1,6 @@
 import torch.utils.data as data
 import numpy as np
-from imageio import imread
+from imageio.v2 import imread
 from path import Path
 import torch
 from scipy import sparse
