@@ -119,7 +119,7 @@ def compute_pairwise_loss(tgt_img, ref_img, tgt_depth, ref_depth, pose, intrinsi
 
     # reduce photometric loss weight for dynamic regions
     if not hparams.no_dynamic_mask:
-        weight_mask = (1-diff_depth)
+        weight_mask = (1-diff_depth).detach()
         diff_img = diff_img * weight_mask
 
     return diff_img, diff_color, diff_depth, valid_mask
@@ -175,7 +175,8 @@ def compute_errors(gt, pred, dataset):
     batch_size, h, w = gt.size()
 
     if pred.nelement() != gt.nelement():
-        pred = F.interpolate(pred, [h, w], mode='bilinear', align_corners=False)
+        pred = F.interpolate(
+            pred, [h, w], mode='bilinear', align_corners=False)
 
     pred = pred.view(batch_size, h, w)
 

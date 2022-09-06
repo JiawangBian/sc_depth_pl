@@ -26,13 +26,15 @@ def get_opts():
     parser.add_argument('--ckpt_path', type=str, default=None,
                         help='pretrained checkpoint path to load')
 
-    # loss
+    # loss for sc_v1
     parser.add_argument('--photo_weight', type=float,
                         default=1.0, help='photometric loss weight')
     parser.add_argument('--geometry_weight', type=float,
-                        default=1.0, help='geometry loss weight')
+                        default=0.1, help='geometry loss weight')
     parser.add_argument('--smooth_weight', type=float,
-                        default=1.0, help='smoothness loss weight')
+                        default=0.1, help='smoothness loss weight')
+
+    # loss for sc_v2
     parser.add_argument('--rot_t_weight', type=float,
                         default=1.0, help='rotation triplet loss weight')
     parser.add_argument('--rot_c_weight', type=float,

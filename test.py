@@ -1,19 +1,14 @@
 import numpy as np
-from tqdm import tqdm
 import torch
 from torch.utils.data import DataLoader
+from tqdm import tqdm
 
-# pytorch-lightning
+import datasets.custom_transforms as custom_transforms
 from config import get_opts, get_training_size
-
+from datasets.test_folder import TestSet
+from losses.loss_functions import compute_errors
 from SC_Depth import SC_Depth
 from SC_DepthV2 import SC_DepthV2
-
-from datasets.test_folder import TestSet
-import datasets.custom_transforms as custom_transforms
-
-from losses.loss_functions import compute_errors
-
 from visualization import *
 
 

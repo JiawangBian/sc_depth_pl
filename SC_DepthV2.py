@@ -26,7 +26,9 @@ class SC_DepthV2(LightningModule):
         rot1_list = []
         rot2_list = []
         rot3_list = []
+        rot3_gt_list = []
         ref_imgs_warped = []
+
         for ref_img in ref_imgs:
             rot1 = self.rectify_net(tgt_img, ref_img)
             rot_warped_img = inverse_rotation_warp(ref_img, rot1, intrinsics)
@@ -35,7 +37,19 @@ class SC_DepthV2(LightningModule):
             rot2 = self.rectify_net(tgt_img, rot_warped_img)
             rot2_list += [rot2]
 
-            rot3 = self.rectify_net(rot_warped_img, ref_img)
+            # When rot1 is not too large or small, we use rot1 to supervise
+            # rot3. Otherwise, we generate a random rotation for supervising
+            # rot3. The random rotation ranges from -0.05 to +0.05.
+            if rot1.abs().mean() > 0.02 and rot1.abs().mean() < 0.1:
+                rot3_gt = rot1.clone().detach()
+                warp_ref_img = rot_warped_img.clone().detach()
+            else:
+                rot3_gt = (torch.rand_like(rot1).type_as(rot1) - 0.5) * 0.1
+                warp_ref_img = inverse_rotation_warp(
+                    ref_img, rot3_gt, intrinsics)
+            rot3_gt_list.append(rot3_gt)
+
+            rot3 = self.rectify_net(warp_ref_img, ref_img)
             rot3_list += [rot3]
 
             ref_imgs_warped.append(rot_warped_img)
@@ -44,13 +58,10 @@ class SC_DepthV2(LightningModule):
         rot1 = torch.stack(rot1_list)
         rot2 = torch.stack(rot2_list)
         rot3 = torch.stack(rot3_list)
+        rot3_gt = torch.stack(rot3_gt_list)
 
-        # rot_consistency, rot1 is gt rotation for rot3
-        rot_threshold = 0.02
-        if rot1.abs().mean() > rot_threshold:
-            loss_rot_consistency = (rot3 - rot1).abs().mean()
-        else:
-            loss_rot_consistency = torch.tensor(rot_threshold).type_as(rot1)
+        # rot_consistency, rot1 or random rot as gt for rot3
+        loss_rot_consistency = (rot3 - rot3_gt).abs().mean()
 
         # triplet loss, abs(rot2) should smaller than abs(rot1)
         loss_rot_triplet = (rot2.abs() - rot1.abs() + 0.05).clamp(min=0).mean()
