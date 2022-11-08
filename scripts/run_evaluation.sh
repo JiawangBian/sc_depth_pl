@@ -8,7 +8,6 @@ SEG_MASK=$DATA_ROOT/$DATASET/testing/seg_mask
 
 # run evaluation
 export CUDA_VISIBLE_DEVICES=0
-
 python eval_depth.py \
 --dataset $DATASET \
 --pred_depth=$RESULTS_DIR \

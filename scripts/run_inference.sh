@@ -20,7 +20,6 @@ CKPT=ckpts/ddad_scv3/epoch=99-val_loss=0.1438.ckpt
 
 # run
 export CUDA_VISIBLE_DEVICES=0
-
 python inference.py --config $CONFIG \
 --input_dir $INPUT --output_dir $OUTPUT \
 --ckpt_path $CKPT --save-vis --save-depth
