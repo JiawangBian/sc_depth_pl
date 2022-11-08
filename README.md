@@ -25,7 +25,7 @@ Demo Videos
 ```
 conda create -n sc_depth_env python=3.8
 conda activate sc_depth_env
-conda install pytorch torchvision -c pytorch
+conda install pytorch==1.12.0 torchvision==0.13.0 cudatoolkit=11.3 -c pytorch
 pip install -r requirements.txt
 ```
 
@@ -49,12 +49,9 @@ We organize the video datasets into the following format for training and testin
         --depth (containg ground-truth depths)
         --seg_mask (containing semantic segmentation masks for depth evaluation on dynamic/static regions)
 
-We provide the pre-processed standard datasets:
+We provide pre-processed datasets:
 
-Static scenes:
-[**[kitti_raw]**](https://1drv.ms/u/s!AiV6XqkxJHE2mUax6F2N-rjAs43R?e=gwn6Zi) [**[nyu]**](https://1drv.ms/u/s!AiV6XqkxJHE2mUUA5hElvhZXnqOn?e=51SIE1) 
-
-Dynamic scenes: [**[ddad]**](https://1drv.ms/u/s!AiV6XqkxJHE2oGbDWctLHnkcipPl?e=dM79G8) [**[bonn]**](https://1drv.ms/u/s!AiV6XqkxJHE2oGjo5y92iQG7s2rP?e=1nyAbD) [**[tum]**](https://1drv.ms/u/s!AiV6XqkxJHE2oGeK__jKpaPpg3UW?e=7iZecU)
+[**[kitti, nyu, ddad, bonn, tum]**](https://1drv.ms/u/s!AiV6XqkxJHE2mUFwH6FrHGCuh_y6?e=RxOheF) 
 
 
 ## Training
@@ -101,10 +98,10 @@ We provide the script ("scripts/run_test.sh"), which shows how to test on kitti 
 We provide a bash script ("scripts/run_inference.sh"), which shows how to save the predicted depth (.npy) and visualize it using a color image (.jpg).
 A demo is given here. You can put your images in "demo/input/" folder and run
 ```bash
-python inference.py --config configs/v2/nyu.txt \
+python inference.py --config configs/v3/nyu.txt \
 --input_dir demo/input/ \
 --output_dir demo/output/ \
---ckpt_path ckpts/nyu_scv2/version_10/epoch=101-val_loss=0.1580.ckpt \
+--ckpt_path ckpts/nyu_scv3/epoch=93-val_loss=0.1384.ckpt \
 --save-vis --save-depth
 ```
 You will see the results saved in "demo/output/" folder.
@@ -112,21 +109,16 @@ You will see the results saved in "demo/output/" folder.
 
 ## Pretrained models
 
-We provide pretrained models on kitti and nyu datasets. You need uncompress and put it into "ckpts" folder. Then you can run "scripts/run_test.sh" with the pretrained model (fill your real dataset path), and you will get the following results:
+[**[Models]**](https://1drv.ms/u/s!AiV6XqkxJHE2mULfSmi4yy-_JHSm?e=s97YRM) 
 
-[**[kitti_scv1_model]**](https://1drv.ms/u/s!AiV6XqkxJHE2mUNoHDuA2FKjjioD?e=fD8Ish):
+For v1, we provide models trained on KITTI.
 
-|  Models  | Abs Rel | Sq Rel | Log10 | RMSE  | RMSE(log) | Acc.1 | Acc.2 | Acc.3 |
-|----------|---------|--------|-------|-------|-----------|-------|-------|-------|
-| resnet18 | 0.119   | 0.878  | 0.053 | 4.987 | 0.196     | 0.859 | 0.956 | 0.981 |
+For v2, we provide models trained on NYUv2.
 
- [**[nyu_scv2_model]**](https://1drv.ms/u/s!AiV6XqkxJHE2mUSxFrPz690xaxwH?e=wFOR6A):
+For v3, we provide models trained on KITTI, NYUv2, DDAD, BONN, and TUM.
 
-|  Models  | Abs Rel | Sq Rel | Log10 | RMSE  | RMSE(log) | Acc.1 | Acc.2 | Acc.3 |
-|----------|---------|--------|-------|-------|-----------|-------|-------|-------|
-| resnet18 | 0.142   | 0.112  | 0.061 | 0.554 | 0.186     | 0.808 | 0.951 | 0.987 |
+You need uncompress and put it into "ckpts" folder. Then you can run "scripts/run_test.sh" or "scripts/run_inference.sh" with the pretrained model. Note that you should use the correct config file (which is located at "configs" folder) to get the correct training size.
 
-More pretrained models on more datasets will be provided!
 
 ## References
 
