@@ -9,6 +9,7 @@ from config import get_opts, get_training_size
 
 from SC_Depth import SC_Depth
 from SC_DepthV2 import SC_DepthV2
+from SC_DepthV3 import SC_DepthV3
 
 import datasets.custom_transforms as custom_transforms
 
@@ -23,6 +24,8 @@ def main():
         system = SC_Depth(hparams)
     elif hparams.model_version == 'v2':
         system = SC_DepthV2(hparams)
+    elif hparams.model_version == 'v3':
+        system = SC_DepthV3(hparams)
 
     system = system.load_from_checkpoint(hparams.ckpt_path, strict=False)
 

@@ -1,8 +1,9 @@
-exp_name = nyu_scv2
+exp_name = bonn_scv3
 
-dataset_name = nyu
+dataset_name = bonn
+skip_frames=10
 
-model_version = v2
+model_version = v3
 resnet_layers = 18
 
 lr = 1e-4

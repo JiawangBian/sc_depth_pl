@@ -25,8 +25,10 @@ class Normalize(object):
 
     def __call__(self, images, intrinsics):
         for tensor in images:
-            for t, m, s in zip(tensor, self.mean, self.std):
-                t.sub_(m).div_(s)
+            shape = tensor.size()
+            if shape[0] == 3:
+                for t, m, s in zip(tensor, self.mean, self.std):
+                    t.sub_(m).div_(s)
         return images, intrinsics
 
 
@@ -37,9 +39,12 @@ class ArrayToTensor(object):
         tensors = []
         for im in images:
             # put it from HWC to CHW format
-            im = np.transpose(im, (2, 0, 1))
-            # handle numpy array
-            tensors.append(torch.from_numpy(im).float()/255)
+            if im.ndim < 3:  # depth
+                im = np.expand_dims(im, axis=0)
+                tensors.append(torch.from_numpy(im).float())
+            else:
+                im = np.transpose(im, (2, 0, 1))
+                tensors.append(torch.from_numpy(im).float()/255)
         return tensors, intrinsics
 
 
@@ -72,8 +77,15 @@ class RandomScaleCrop(object):
 
         output_intrinsics[0] *= x_scaling
         output_intrinsics[1] *= y_scaling
-        scaled_images = [cv2.resize(im, dsize=(
-            scaled_w, scaled_h), interpolation=cv2.INTER_LINEAR) for im in images]
+
+        scaled_images = []
+        for im in images:
+            if im.ndim < 3:  # depth
+                scaled_images.append(cv2.resize(im, dsize=(
+                    scaled_w, scaled_h), fx=1.0, fy=1.0, interpolation=cv2.INTER_NEAREST))
+            else:
+                scaled_images.append(cv2.resize(im, dsize=(
+                    scaled_w, scaled_h), interpolation=cv2.INTER_LINEAR))
 
         offset_y = np.random.randint(scaled_h - in_h + 1)
         offset_x = np.random.randint(scaled_w - in_w + 1)

@@ -1,5 +1,5 @@
 # absolute path that contains all datasets
-DATA_ROOT=/media/bjw/Disk/release_depth_data
+DATA_ROOT=/media/bjw/disk1/depth_data
 
 # # kitti
 # DATASET=$DATA_ROOT/kitti
@@ -12,5 +12,6 @@ CONFIG=configs/v2/nyu.txt
 CKPT=ckpts/nyu_scv2/version_10/epoch=101-val_loss=0.1580.ckpt
 
 # run
+export CUDA_VISIBLE_DEVICES=0
 python test.py --config $CONFIG --dataset_dir $DATASET --ckpt_path $CKPT
 

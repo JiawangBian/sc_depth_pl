@@ -1,0 +1,11 @@
+exp_name = ddad_scv3
+
+dataset_name = ddad
+
+model_version = v3
+resnet_layers = 18
+
+lr = 1e-4
+batch_size = 4
+num_epochs = 100
+epoch_size = 1000

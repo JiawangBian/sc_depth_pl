@@ -5,6 +5,8 @@ import torch.nn.functional as F
 import numpy as np
 
 from .inverse_warp import inverse_warp
+from .mask_ranking_loss import Mask_Ranking_Loss
+from .normal_ranking_loss import EdgeguidedNormalRankingLoss
 
 device = torch.device(
     "cuda") if torch.cuda.is_available() else torch.device("cpu")
@@ -48,6 +50,10 @@ class SSIM(nn.Module):
 
 compute_ssim_loss = SSIM().to(device)
 
+normal_ranking_loss = EdgeguidedNormalRankingLoss().to(device)
+
+mask_ranking_loss = Mask_Ranking_Loss().to(device)
+
 
 def photo_and_geometry_loss(tgt_img, ref_imgs, tgt_depth, ref_depths, intrinsics, poses, poses_inv, hparams):
 
@@ -88,7 +94,19 @@ def photo_and_geometry_loss(tgt_img, ref_imgs, tgt_depth, ref_depths, intrinsics
     photo_loss = mean_on_mask(diff_img, valid_mask)
     geometry_loss = mean_on_mask(diff_depth, valid_mask)
 
-    return photo_loss, geometry_loss
+    if hparams.model_version == 'v3':
+        # get dynamic mask for tgt image
+        dynamic_mask = []
+        for i in range(0, len(diff_depth_list), 2):
+            tmp = diff_depth_list[i]
+            tmp[valid_mask_list[i] < 1] = 0
+            dynamic_mask += [1-tmp]
+
+        dynamic_mask = torch.cat(dynamic_mask, dim=1).mean(dim=1, keepdim=True)
+
+        return photo_loss, geometry_loss, dynamic_mask
+    else:
+        return photo_loss, geometry_loss
 
 
 def compute_pairwise_loss(tgt_img, ref_img, tgt_depth, ref_depth, pose, intrinsic, hparams):

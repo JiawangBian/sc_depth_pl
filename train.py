@@ -6,6 +6,7 @@ from config import get_opts
 from data_modules import VideosDataModule
 from SC_Depth import SC_Depth
 from SC_DepthV2 import SC_DepthV2
+from SC_DepthV3 import SC_DepthV3
 
 if __name__ == '__main__':
     hparams = get_opts()
@@ -15,6 +16,8 @@ if __name__ == '__main__':
         system = SC_Depth(hparams)
     elif hparams.model_version == 'v2':
         system = SC_DepthV2(hparams)
+    elif hparams.model_version == 'v3':
+        system = SC_DepthV3(hparams)
 
     # pl data module
     dm = VideosDataModule(hparams)

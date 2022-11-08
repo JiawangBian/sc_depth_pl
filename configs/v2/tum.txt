@@ -1,6 +1,7 @@
-exp_name = nyu_scv2
+exp_name = tum_scv2
 
-dataset_name = nyu
+dataset_name = tum
+skip_frames = 10
 
 model_version = v2
 resnet_layers = 18

@@ -13,6 +13,8 @@ class VideosDataModule(LightningDataModule):
         super().__init__()
         self.save_hyperparameters()
         self.training_size = get_training_size(hparams.dataset_name)
+        self.load_pseudo_depth = True if (
+            hparams.model_version == 'v3') else False
 
         # data loader
         self.train_transform = custom_transforms.Compose([
@@ -36,10 +38,10 @@ class VideosDataModule(LightningDataModule):
         self.train_dataset = TrainFolder(
             self.hparams.hparams.dataset_dir,
             transform=self.train_transform,
-            train=True,
             sequence_length=self.hparams.hparams.sequence_length,
             skip_frames=self.hparams.hparams.skip_frames,
-            use_frame_index=self.hparams.hparams.use_frame_index
+            use_frame_index=self.hparams.hparams.use_frame_index,
+            with_pseudo_depth=self.load_pseudo_depth
         )
 
         if self.hparams.hparams.val_mode == 'depth':
@@ -52,10 +54,10 @@ class VideosDataModule(LightningDataModule):
             self.val_dataset = TrainFolder(
                 self.hparams.hparams.dataset_dir,
                 transform=self.valid_transform,
-                train=False,
                 sequence_length=self.hparams.hparams.sequence_length,
                 skip_frames=self.hparams.hparams.skip_frames,
-                use_frame_index=self.hparams.hparams.use_frame_index
+                use_frame_index=self.hparams.hparams.use_frame_index,
+                with_pseudo_depth=self.load_pseudo_depth
             )
         else:
             print("wrong validation mode")

@@ -11,7 +11,7 @@ def get_opts():
     # dataset
     parser.add_argument('--dataset_dir', type=str)
     parser.add_argument('--dataset_name', type=str,
-                        default='kitti', choices=['kitti', 'nyu', 'ddad'])
+                        default='kitti', choices=['kitti', 'nyu', 'ddad', 'bonn', 'tum'])
     parser.add_argument('--sequence_length', type=int,
                         default=3, help='number of images for training')
     parser.add_argument('--skip_frames', type=int, default=1,
@@ -21,7 +21,7 @@ def get_opts():
 
     # model
     parser.add_argument('--model_version', type=str,
-                        default='v1', choices=['v1', 'v2'])
+                        default='v1', choices=['v1', 'v2', 'v3'])
     parser.add_argument('--resnet_layers', type=int, default=18)
     parser.add_argument('--ckpt_path', type=str, default=None,
                         help='pretrained checkpoint path to load')
@@ -41,6 +41,14 @@ def get_opts():
                         default=1.0, help='rotation consistency loss weight')
     parser.add_argument('--val_mode', type=str, default='depth',
                         choices=['photo', 'depth'], help='how to run validation')
+
+    # loss for sc_v3
+    parser.add_argument('--mask_rank_weight', type=float, default=0.1,
+                        help='ranking loss with dynamic mask sampling')
+    parser.add_argument('--normal_matching_weight', type=float,
+                        default=0.1, help='weight for normal L1 loss')
+    parser.add_argument('--normal_rank_weight', type=float, default=0.1,
+                        help='edge-guided sampling for normal ranking loss')
 
     # for ablation study
     parser.add_argument('--no_ssim', action='store_true',
@@ -78,7 +86,7 @@ def get_training_size(dataset_name):
         training_size = [256, 832]
     elif dataset_name == 'ddad':
         training_size = [384, 640]
-    elif dataset_name == 'nyu':
+    elif dataset_name in ['nyu', 'tum', 'bonn']:
         training_size = [256, 320]
     else:
         print('unknown dataset type')

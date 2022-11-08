@@ -8,7 +8,6 @@ from config import get_opts, get_training_size
 from datasets.test_folder import TestSet
 from losses.loss_functions import compute_errors
 from SC_Depth import SC_Depth
-from SC_DepthV2 import SC_DepthV2
 from visualization import *
 
 
@@ -17,10 +16,9 @@ def main():
     hparams = get_opts()
 
     # initialize network
-    if hparams.model_version == 'v1':
-        system = SC_Depth(hparams)
-    elif hparams.model_version == 'v2':
-        system = SC_DepthV2(hparams)
+    system = SC_Depth(hparams)
+
+    # load ckpts
     system = system.load_from_checkpoint(hparams.ckpt_path, strict=False)
 
     model = system.depth_net
