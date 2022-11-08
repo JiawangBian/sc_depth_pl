@@ -4,11 +4,11 @@ This repo provides the pytorch lightning implementation of **SC-Depth** (V1, V2,
 
 In the SC-DepthV1 ([IJCV 2021](https://jwbian.net/Papers/SC_Depth_IJCV_21.pdf) & [NeurIPS 2019](https://papers.nips.cc/paper/2019/file/6364d3f0f495b6ab9dcf8d3b5c6e0b01-Paper.pdf)), we propose (i) **geometry consistency loss** for scale-consistent depth prediction over time and (ii) **self-discovered mask** for detecting and removing dynamic regions and occlusions during training towards higher accuracy. The predicted depth is sufficiently accurate and consistent for use in the ORB-SLAM2 system. The below video showcases the estimated depth in the form of pointcloud (top) and color map (bottom right).
 
-[<img src="https://jwbian.net/wp-content/uploads/2020/06/77CXZX@H37PIWDBX0R7T.png" width="450">](https://www.youtube.com/watch?v=OkfK3wmMnpo)
+[<img src="https://jwbian.net/wp-content/uploads/2020/06/77CXZX@H37PIWDBX0R7T.png" width="600">](https://www.youtube.com/watch?v=OkfK3wmMnpo)
 
 In the SC-DepthV2 ([TPMAI 2022](https://arxiv.org/abs/2006.02708v2)), we prove that the large relative rotational motions in the hand-held camera captured videos is the main challenge for unsupervised monocular depth estimation in indoor scenes. Based on this findings, we propose auto-recitify network (**ARN**) to handle the large relative rotation between consecutive video frames. It is integrated into SC-DepthV1 and jointly trained with self-supervised losses, greatly boosting the performance.
 
-<img src="https://jwbian.net/wp-content/uploads/2020/06/vis_depth.png" width="450">
+<img src="https://jwbian.net/wp-content/uploads/2020/06/vis_depth.png" width="600">
 
 In the SC-DepthV3 ([ArXiv 2022](https://arxiv.org/abs/2211.03660)), we propose a robust learning framework for accurate and sharp monocular depth estimation in (highly) dynamic scenes. As the photometric loss, which is the main loss in the self-supervised methods, is not valid in dynamic object regions and occlusion, previous methods show poor accuracy in dynamic scenes and blurred depth prediction at object boundaries. We propose to leverage an external pretrained depth estimation network for generating the single-image depth prior, based on which we propose effective losses to constrain self-supervised depth learning. The evaluation results on six challenging datasets including both static and dynamic scenes demonstrate the efficacy of the proposed method.
 
