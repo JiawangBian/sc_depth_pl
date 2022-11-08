@@ -91,7 +91,7 @@ python train.py --config $CONFIG --dataset_dir $DATASET --use_frame_index
 [**[Models]**](https://1drv.ms/u/s!AiV6XqkxJHE2mULfSmi4yy-_JHSm?e=s97YRM) 
 You need uncompress and put it into "ckpts" folder. Then you can run "scripts/run_test.sh" or "scripts/run_inference.sh" with the pretrained model. 
 
-For v1, we provide models trained on KITTI.
+For v1, we provide models trained on KITTI and DDAD.
 
 For v2, we provide models trained on NYUv2.
 
