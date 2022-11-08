@@ -4,11 +4,11 @@ This repo provides the pytorch lightning implementation of **SC-Depth** (V1, V2,
 
 In the SC-DepthV1 ([IJCV 2021](https://jwbian.net/Papers/SC_Depth_IJCV_21.pdf) & [NeurIPS 2019](https://papers.nips.cc/paper/2019/file/6364d3f0f495b6ab9dcf8d3b5c6e0b01-Paper.pdf)), we propose (i) **geometry consistency loss** for scale-consistent depth prediction over time and (ii) **self-discovered mask** for detecting and removing dynamic regions and occlusions during training towards higher accuracy. The predicted depth is sufficiently accurate and consistent for use in the ORB-SLAM2 system. The below video showcases the estimated depth in the form of pointcloud (top) and color map (bottom right).
 
-[<img src="https://jwbian.net/wp-content/uploads/2020/06/77CXZX@H37PIWDBX0R7T.png" width="400">](https://www.youtube.com/watch?v=OkfK3wmMnpo)
+[<img src="https://jwbian.net/wp-content/uploads/2020/06/77CXZX@H37PIWDBX0R7T.png" width="450">](https://www.youtube.com/watch?v=OkfK3wmMnpo)
 
 In the SC-DepthV2 ([TPMAI 2022](https://arxiv.org/abs/2006.02708v2)), we prove that the large relative rotational motions in the hand-held camera captured videos is the main challenge for unsupervised monocular depth estimation in indoor scenes. Based on this findings, we propose auto-recitify network (**ARN**) to handle the large relative rotation between consecutive video frames. It is integrated into SC-DepthV1 and jointly trained with self-supervised losses, greatly boosting the performance.
 
-<img src="https://jwbian.net/wp-content/uploads/2020/06/vis_depth.png" width="400">
+<img src="https://jwbian.net/wp-content/uploads/2020/06/vis_depth.png" width="450">
 
 In the SC-DepthV3 ([ArXiv 2022](https://arxiv.org/abs/2211.03660)), we propose a robust learning framework for accurate and sharp monocular depth estimation in (highly) dynamic scenes. As the photometric loss, which is the main loss in the self-supervised methods, is not valid in dynamic object regions and occlusion, previous methods show poor accuracy in dynamic scenes and blurred depth prediction at object boundaries. We propose to leverage an external pretrained depth estimation network for generating the single-image depth prior, based on which we propose effective losses to constrain self-supervised depth learning. The evaluation results on six challenging datasets including both static and dynamic scenes demonstrate the efficacy of the proposed method.
 
@@ -56,7 +56,7 @@ We provide pre-processed datasets:
 
 ## Training
 
-We provide a bash script ("scripts/run_train.sh"), which shows how to train on kitti and nyu datasets. Generally, you need edit the config file (e.g., "configs/v1/kitti.txt") based on your devices and run
+We provide a bash script ("scripts/run_train.sh"), which shows how to train on kitti, nyu, and datasets. Generally, you need edit the config file (e.g., "configs/v1/kitti.txt") based on your devices and run
 ```bash
 python train.py --config $CONFIG --dataset_dir $DATASET
 ```
@@ -86,17 +86,30 @@ python train.py --config $CONFIG --dataset_dir $DATASET --use_frame_index
 ```
 
 
+## Pretrained models
+
+[**[Models]**](https://1drv.ms/u/s!AiV6XqkxJHE2mULfSmi4yy-_JHSm?e=s97YRM) 
+You need uncompress and put it into "ckpts" folder. Then you can run "scripts/run_test.sh" or "scripts/run_inference.sh" with the pretrained model. 
+
+For v1, we provide models trained on KITTI.
+
+For v2, we provide models trained on NYUv2.
+
+For v3, we provide models trained on KITTI, NYUv2, DDAD, BONN, and TUM.
+
+
+
 ## Testing
 
-We provide the script ("scripts/run_test.sh"), which shows how to test on kitti and nyu datasets.
+We provide the script ("scripts/run_test.sh"), which shows how to test on kitti, nyu, and ddad datasets. The script only evaluates depth accuracy on full images. See the next section for an evaluation of depth estimation on dynamic/static regions, separately.
 
     python test.py --config $CONFIG --dataset_dir $DATASET --ckpt_path $CKPT
-
-
+    
 ## Inference
 
-We provide a bash script ("scripts/run_inference.sh"), which shows how to save the predicted depth (.npy) and visualize it using a color image (.jpg).
-A demo is given here. You can put your images in "demo/input/" folder and run
+We provide a bash script ("scripts/run_inference.sh"), which shows how to save the predicted depth (.npy) and visualization images (.jpg) on the DDAD testing dataset. 
+
+A simple demo is given here. You can put your images in "demo/input/" folder and run
 ```bash
 python inference.py --config configs/v3/nyu.txt \
 --input_dir demo/input/ \
@@ -107,17 +120,16 @@ python inference.py --config configs/v3/nyu.txt \
 You will see the results saved in "demo/output/" folder.
 
 
-## Pretrained models
+## Evaluation on dynamic/static regions
 
-[**[Models]**](https://1drv.ms/u/s!AiV6XqkxJHE2mULfSmi4yy-_JHSm?e=s97YRM) 
-
-For v1, we provide models trained on KITTI.
-
-For v2, we provide models trained on NYUv2.
-
-For v3, we provide models trained on KITTI, NYUv2, DDAD, BONN, and TUM.
-
-You need uncompress and put it into "ckpts" folder. Then you can run "scripts/run_test.sh" or "scripts/run_inference.sh" with the pretrained model. Note that you should use the correct config file (which is located at "configs" folder) to get the correct training size.
+We provide a bash script ("scripts/run_evaluation.sh"), which shows how to evaluate on the DDAD dataset. You must run ("scripts/run_inference.sh") to save the depth estimation results before running evaluation.
+```bash
+python eval_depth.py \
+--dataset $DATASET_FOLDER \
+--pred_depth=$RESULTS_FOLDER \
+--gt_depth=$GT_FOLDER \
+--seg_mask=$SEG_MASK_FOLDER
+```
 
 
 ## References
