@@ -1,6 +1,6 @@
 # SC_Depth:
 
-This repo provides the pytorch lightning implementation of **SC-Depth** (V1, V2, and ongoing V3) for **self-supervised learning of monocular depth from video**.
+This repo provides the pytorch lightning implementation of **SC-Depth** (V1, V2, and V3) for **self-supervised learning of monocular depth from video**.
 
 In the SC-DepthV1 ([IJCV 2021](https://jwbian.net/Papers/SC_Depth_IJCV_21.pdf) & [NeurIPS 2019](https://papers.nips.cc/paper/2019/file/6364d3f0f495b6ab9dcf8d3b5c6e0b01-Paper.pdf)), we propose (i) **geometry consistency loss** for scale-consistent depth prediction over time and (ii) **self-discovered mask** for detecting and removing dynamic regions and occlusions during training towards higher accuracy. The predicted depth is sufficiently accurate and consistent for use in the ORB-SLAM2 system. The below video showcases the estimated depth in the form of pointcloud (top) and color map (bottom right).
 
@@ -9,6 +9,17 @@ In the SC-DepthV1 ([IJCV 2021](https://jwbian.net/Papers/SC_Depth_IJCV_21.pdf) &
 In the SC-DepthV2 ([TPMAI 2022](https://arxiv.org/abs/2006.02708v2)), we prove that the large relative rotational motions in the hand-held camera captured videos is the main challenge for unsupervised monocular depth estimation in indoor scenes. Based on this findings, we propose auto-recitify network (**ARN**) to handle the large relative rotation between consecutive video frames. It is integrated into SC-DepthV1 and jointly trained with self-supervised losses, greatly boosting the performance.
 
 <img src="https://jwbian.net/wp-content/uploads/2020/06/vis_depth.png" width="400">
+
+In the SC-DepthV3 ([ArXiv 2022](https://arxiv.org/abs/2211.03660)), we propose a robust learning framework for accurate and sharp monocular depth estimation in (highly) dynamic scenes. As the photometric loss, which is the main loss in the self-supervised methods, is not valid in dynamic object regions and occlusion, previous methods show poor accuracy in dynamic scenes and blurred depth prediction at object boundaries. We propose to leverage an external pretrained depth estimation network for generating the single-image depth prior, based on which we propose effective losses to constrain self-supervised depth learning. The evaluation results on six challenging datasets including both static and dynamic scenes demonstrate the efficacy of the proposed method.
+
+Qualatative depth estimation results: DDAD, BONN, TUM, IBIMS-1
+
+<img src="https://jwbian.net/Demo/vis_ddad.jpg" width="400"> <img src="https://jwbian.net/Demo/vis_bonn.jpg" width="400"> <img src="https://jwbian.net/Demo/vis_tum.jpg" width="400"> <img src="https://jwbian.net/Demo/vis_ibims.jpg" width="400">
+
+Demo Videos
+
+[<img src="https://img.youtube.com/vi/Mzd_csVpjys/hqdefault.jpg" width="400">](https://youtu.be/Mzd_csVpjys)
+[<img src="https://img.youtube.com/vi/E-F2VVYVHFQ/hqdefault.jpg" width="400">](https://youtu.be/E-F2VVYVHFQ)
 
 ## Install
 ```
@@ -150,5 +161,19 @@ which is an extension of previous conference version:
   author={Bian, Jia-Wang and Zhan, Huangying and Wang, Naiyan and Chin, Tat-Jin and Shen, Chunhua and Reid, Ian}, 
   journal= {IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI)}, 
   year={2021} 
+}
+```
+
+#### SC-DepthV3:
+**SC-DepthV3: Robust Self-supervised Monocular Depth Estimation for Dynamic Scenes (ArXiv 2022)** \
+*Libo Sun\*, Jia-Wang Bian\*, Huangying Zhan, Wei Yin, Ian Reid, Chunhua Shen*
+[**[paper]**](https://arxiv.org/abs/2211.03660) \
+\* denotes equal contribution and joint first author
+```
+@article{sc_depthv3, 
+  title={SC-DepthV3: Robust Self-supervised Monocular Depth Estimation for Dynamic Scenes}, 
+  author={Sun, Libo and Bian, Jia-Wang and Zhan, Huangying and Yin, Wei and Reid, Ian and Shen, Chunhua}, 
+  journal= {arXiv:2211.03660}, 
+  year={2022} 
 }
 ```
