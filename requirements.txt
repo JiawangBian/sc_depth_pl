@@ -7,6 +7,7 @@ path
 scipy
 configargparse
 kornia
+torchvision==0.13.0
 
 # conda create -n sc_depth_env python=3.8
 # conda activate sc_depth_env
