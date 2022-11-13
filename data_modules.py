@@ -63,7 +63,7 @@ class VideosDataModule(LightningDataModule):
             print("wrong validation mode")
 
         print('{} samples found for training'.format(len(self.train_dataset)))
-        print('{} samples found for validatioin'.format(len(self.val_dataset)))
+        print('{} samples found for validation'.format(len(self.val_dataset)))
 
     def train_dataloader(self):
         sampler = RandomSampler(self.train_dataset,

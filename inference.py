@@ -36,7 +36,7 @@ def main():
     # training size
     training_size = get_training_size(hparams.dataset_name)
 
-    # normaliazation
+    # normalization
     inference_transform = custom_transforms.Compose([
         custom_transforms.RescaleTo(training_size),
         custom_transforms.ArrayToTensor(),
