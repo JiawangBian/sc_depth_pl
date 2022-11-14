@@ -1,91 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<title>SC-DepthV3</title>
-		<!-- Bootstrap core CSS -->
-		<link
-		  rel="stylesheet" 
-		  href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" 
-		  integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" 
-		  crossorigin="anonymous">
-		<!-- Custom fonts for this template -->
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-		<!-- Custom styles for this template -->
-		<link href="css/academicons.css" rel="stylesheet">
-		<link href="css/footer.css" rel="stylesheet">
-		<link href="css/style.css" rel="stylesheet">
-	</head>
-	<body>
-</nav>
-<main role="main" class="container">
-	<div class="title">
-	    <h1>SC-DepthV3: Robust Self-supervised Monocular Depth Estimation for Dynamic Scenes</h1>
-	</div>
-	<div class="col text-center">
-	    <p class="authors">
-		  Libo Sun*,
-	      <a href="https://jwbian.net/">Jia-Wang Bian* </a>,
-	      <a href="https://huangying-zhan.github.io/">Huangying Zhan </a>,
-	      <a href="https://yvanyin.net/">Wei Yin </a>,	
-	      <a href="https://cs.adelaide.edu.au/~ianr/">Ian Reid</a>,
-	      <a href="https://cshen.github.io/">Chunhua Shen</a> <br>
-	      * denotes equal contribution and joint first author
-	    </p>
-	</div>
-	<div class="col text-center">
-	    <a class="btn btn-primary" href="https://arxiv.org/abs/2211.03660" role="button">Arxiv</a>
-	    <a class="btn btn-primary" href="#bibtex" role="button">Bibtex</a>
-	    <a class="btn btn-primary" href="https://github.com/JiawangBian/sc_depth_pl" role="button">Code</a>
-	</div>
-	<h2>Abstract</h2>
-	  <p>
-	    Self-supervised monocular depth estimation has shown impressive results in static scenes. 
-		  It relies on the multi-view consistency assumption for training networks, however, 
-		  that is violated in dynamic object regions and occlusions. Consequently, existing 
-		  methods show poor accuracy in dynamic scenes, and the estimated depth map is blurred 
-		  at object boundaries because they are usually occluded in other training views. 
-		  In this paper, we propose SC-DepthV3 for addressing the challenges. Specifically, 
-		  we introduce an external pretrained monocular depth estimation model for generating 
-		  single-image depth prior, namely pseudo-depth, based on which we propose novel losses to 
-		  boost self-supervised training. As a result, our model can predict sharp and accurate 
-		  depth maps, even when training from monocular videos of highly-dynamic scenes. We 
-		  demonstrate the significantly superior performance of our method over previous methods 
-		  on six challenging datasets, and we provide detailed ablation studies for the proposed terms.
-	  </p>
-	<h2>Visualisation</h2>
-	 <p>
-	   We show the depth estimation results on three datasets: DDAD, BONN, and TUM.
-	 </p>
-	 <!-- <p>
-	   DDAD
-	 </p> -->
-	 <video class='center_video' controls autoplay muted loop>
-	   <source src="video/ddad_video.mp4" type="video/mp4">
-	 Your browser does not support the video tag.
-	 </video>
-	 <video class='center_video' controls autoplay muted loop>
-	   <source src="video/bonn_video.mp4" type="video/mp4">
-	 Your browser does not support the video tag.
-	 </video>
-	 <video class='center_video' controls autoplay muted loop>
-	   <source src="video/tum_video.mp4" type="video/mp4">
-	 Your browser does not support the video tag.
-	 </video>
-	<h2>BibTeX</h2>
-<code class="codebox" id="bibtex"><pre>
+
+<head>
+	<meta charset="utf-8" />
+	<script type="text/javascript"
+		src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>SC-DepthV3</title>
+	<!-- Bootstrap core CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+		integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+	<!-- Custom fonts for this template -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- Custom styles for this template -->
+	<link href="css/academicons.css" rel="stylesheet">
+	<link href="css/footer.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+	</nav>
+	<main role="main" class="container">
+		<div class="title">
+			<h1>SC-DepthV3: Robust Self-supervised Monocular Depth Estimation for Dynamic Scenes</h1>
+		</div>
+		<div class="col text-center">
+			<p class="authors">
+				Libo Sun*,
+				<a href="https://jwbian.net/">Jia-Wang Bian* </a>,
+				<a href="https://huangying-zhan.github.io/">Huangying Zhan </a>,
+				<a href="https://yvanyin.net/">Wei Yin </a>,
+				<a href="https://cs.adelaide.edu.au/~ianr/">Ian Reid</a>,
+				<a href="https://cshen.github.io/">Chunhua Shen</a> <br>
+				* denotes equal contribution and joint first author
+			</p>
+		</div>
+		<div class="col text-center">
+			<a class="btn btn-primary" href="https://arxiv.org/abs/2211.03660" role="button">Arxiv</a>
+			<a class="btn btn-primary" href="#bibtex" role="button">Bibtex</a>
+			<a class="btn btn-primary" href="https://github.com/JiawangBian/sc_depth_pl" role="button">Code</a>
+		</div>
+		<!-- 
+		<h2>Video Demos (Trained in Dynamic Scenes)</h2> -->
+
+		<div class="center_video">
+			<video controls autoplay muted loop>
+				<source src="video/ddad_video.mp4" type="video/mp4">
+				Your browser does not support the video tag.
+			</video>
+			<video controls autoplay muted loop>
+				<source src="video/bonn_video.mp4" type="video/mp4">
+				Your browser does not support the video tag.
+			</video>
+			<video controls autoplay muted loop>
+				<source src="video/tum_video.mp4" type="video/mp4">
+				Your browser does not support the video tag.
+			</video>
+		</div>
+
+		<h2>Abstract & Method</h2>
+		<p>
+			Self-supervised monocular depth estimation has shown impressive results in static scenes.
+			It relies on the multi-view consistency assumption for training networks, however,
+			that is violated in dynamic object regions and occlusions. Consequently, existing
+			methods show poor accuracy in dynamic scenes, and the estimated depth map is blurred
+			at object boundaries because they are usually occluded in other training views.
+			In this paper, we propose SC-DepthV3 for addressing the challenges. Specifically,
+			we introduce an external pretrained monocular depth estimation model for generating
+			single-image depth prior, namely pseudo-depth, based on which we propose novel losses to
+			boost self-supervised training. As a result, our model can predict sharp and accurate
+			depth maps, even when training from monocular videos of highly-dynamic scenes. We
+			demonstrate the significantly superior performance of our method over previous methods
+			on six challenging datasets, and we provide detailed ablation studies for the proposed terms.
+		</p>
+		<img src="image/method.png" class='center'>
+
+
+		<h2>Evaluation of Depth Accuracy in Dynamic Scenes</h2>
+		<img src="image/accuracy.png" class='center'>
+
+		<h2>More Qulatative Comparison</h2>
+		<img src="image/depth_vis1.png" class='center'>
+		<img src="image/depth_vis2.png" class='center'>
+
+
+		<h2>BibTeX</h2>
+		<code class="codebox" id="bibtex"><pre>
 @article{sc_depthv3, 
-  title={SC-DepthV3: Robust Self-supervised Monocular Depth Estimation for Dynamic Scenes}, 
-  author={Sun, Libo and Bian, Jia-Wang and Zhan, Huangying and Yin, Wei and Reid, Ian and Shen, Chunhua}, 
-  journal= {arXiv:2211.03660}, 
-  year={2022} 
+title={SC-DepthV3: Robust Self-supervised Monocular Depth Estimation for Dynamic Scenes}, 
+author={Sun, Libo and Bian, Jia-Wang and Zhan, Huangying and Yin, Wei and Reid, Ian and Shen, Chunhua}, 
+journal= {arXiv:2211.03660}, 
+year={2022} 
 }
-</pre></code>
+		</pre></code>
 
 
-</main>
+	</main>
 </body>
-	
+
 </html>
