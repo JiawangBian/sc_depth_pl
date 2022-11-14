@@ -1,0 +1,47 @@
+h1{
+  font-size: 35px;
+}
+
+h2{
+  font-size: 28px;
+}
+
+pre{
+  margin-bottom: 0;
+}
+
+.title {
+  padding-top: 3rem;
+  text-align: center;
+}
+
+.bmvc_label{
+  text-align: center;
+  font-size: 20px;
+}
+
+.authors{
+  font-size: 20px;
+  text-align: center;
+}
+
+.center_video{
+  margin: 0 auto;
+  display: block;
+  width: 80%;
+  max-width: 100%;
+  height: auto;
+}
+
+.codebox {
+        /* color: #343a40; */
+        /* background-color: #f8f9fa; */
+        padding-top: 20px;
+        padding-bottom: 10px;
+        padding-left: 30px;
+        padding-right: 30px;
+        font-size: 0.9em;
+        max-width: 100%;
+        display: inline-block;
+        text-align: left;
+}

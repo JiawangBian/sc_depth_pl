@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>Ray-ONet</title>
+		<!-- Bootstrap core CSS -->
+		<link
+		  rel="stylesheet" 
+		  href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" 
+		  integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" 
+		  crossorigin="anonymous">
+		<!-- Custom fonts for this template -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<!-- Custom styles for this template -->
+		<link href="css/academicons.css" rel="stylesheet">
+		<link href="css/footer.css" rel="stylesheet">
+		<link href="css/style.css" rel="stylesheet">
+	</head>
+	<body>
+</nav>
+<main role="main" class="container">
+	<div class="title">
+	    <h1>Ray-ONet: Efficient 3D Reconstruction From A Single RGB Image</h1>
+	</div>
+	<div class="col text-center">
+	    <p class="authors">
+		  Wenjing Bian,
+	      Zirui Wang, 
+	      <a href="https://likojack.github.io/kejieli/#/home">Kejie Li</a>,
+	      <a href="http://www.robots.ox.ac.uk/~victor/">Victor Adrian Prisacariu</a><br>
+	      
+	      <a href="http://active.vision"> Active Vision Lab</a>,
+	      University of Oxford
+	    </p>
+	</div>
+	<div class="col text-center">
+	    <a class="btn btn-primary" href="http://arxiv.org/abs/2107.01899" role="button">Arxiv</a>
+	    <!-- <a class="btn btn-secondary" href="https://github.com/ActiveVisionLab/nerfmm" role="button">Code</a> -->
+	    <!-- <a class="btn btn-secondary" href="https://colab.research.google.com/drive/1pRljG5lYj_dgNG_sMRyH2EKbpq3OezvK?usp=sharing" role="button">CoLab Notebook</a> -->
+	    <!-- <a class="btn btn-secondary" href="https://www.robots.ox.ac.uk/~ryan/nerfmm2021/nerfmm_release_data.tar.gz" role="button">Data</a> -->
+		<a class="btn btn-primary" href="#bibtex" role="button">Bibtex</a>
+		<a class="btn btn-primary" href="https://github.com/ActiveVisionLab/ray-onet/" role="button">Code</a>
+<!--		<button type="button" class="btn btn-primary" disabled>Code</button>-->
+	</div>
+	<h2>Abstract</h2>
+	  <p>
+	    We propose Ray-ONet to reconstruct detailed 3D models from monocular images efficiently. 
+	    By predicting a series of occupancy probabilities along a ray that is back-projected from a 
+		pixel in the camera coordinate, our method Ray-ONet improves the reconstruction accuracy in comparison 
+		with Occupancy Networks (ONet), while reducing the network inference complexity to O(\(N^2\)).
+	    As a result, Ray-ONet achieves state-of-the-art performance on the ShapeNet benchmark with more than 
+		20\(\times\) speed-up at \(128^3\) resolution and maintains a similar memory footprint during inference.
+	  </p>
+	<h2>Visualisation</h2>
+	 <p>
+	   We show the 3D reconstruction results on three datasets: ShapeNet, Online Products, Pix3D.
+	   Our model is trained with ShapeNet objects in 13 categories.
+	 </p>
+	 <!-- <p>
+	   ShapeNet
+	 </p> -->
+	 <video class='center_video' controls autoplay muted loop>
+	   <source src="video/web_v1.mp4" type="video/mp4">
+	 Your browser does not support the video tag.
+	 </video>
+	 <video class='center_video' controls autoplay muted loop>
+	   <source src="video/web_v2.mp4" type="video/mp4">
+	 Your browser does not support the video tag.
+	 </video>
+	 <video class='center_video' controls autoplay muted loop>
+	   <source src="video/web_v3.mp4" type="video/mp4">
+	 Your browser does not support the video tag.
+	 </video>
+	<h2>BibTeX</h2>
+<code class="codebox" id="bibtex"><pre>
+  @inproceedings{bian2021rayonet,
+	title={Ray-ONet: Efficient 3D Reconstruction From A Single RGB Image}, 
+	author={Wenjing Bian and Zirui Wang and Kejie Li and Victor Adrian Prisacariu},
+	booktitle={BMVC},
+	year={2021}
+   }
+   
+</pre></code>
+	<h2>Acknowledgement</h2>
+	  <p>
+	    We thank <a href="https://www.robots.ox.ac.uk/~costain/">Theo Costain</a> for helpful discussions 
+		and comments. We thank <a href="https://www.popov.im/">Stefan Popov</a> for providing the 
+		code for <a href="https://arxiv.org/abs/2004.12989">CoReNet</a> and guidance on training. Wenjing Bian is 
+		supported by China Scholarship Council (CSC). 
+	  </p>
+<!-- <section style="padding: 1em">
+      <center>
+        <div class="footer-social-icons">
+          <ul class="social-icons">
+            <li><a href="https://github.com/elliottwu" title="GitHub" class="social-icon"> <i class="fa fa-github"></i></a></li>
+            <li><a href="https://scholar.google.com/citations?user=36NmvrMAAAAJ&hl=en" title="Google Scholar" class="social-icon"> <i class="fa ai ai-google-scholar"></i></a></li>
+            <li><a href="https://twitter.com/elliottszwu" title="Twitter" class="social-icon"> <i class="fa fa-twitter"></i></a></li>
+            <li><a href="https://www.robots.ox.ac.uk/~szwu/storage/cv_szwu.pdf" title="CV" class="social-icon"> <i class="fa ai ai-cv"></i></a></li>
+          </ul>
+        </div>
+      </center>
+</section> -->
+
+</main>
+</body>
+	
+</html>
