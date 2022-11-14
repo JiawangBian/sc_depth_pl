@@ -18,8 +18,20 @@ Qualatative depth estimation results: DDAD, BONN, TUM, IBIMS-1
 
 Demo Videos
 
-[<img src="https://img.youtube.com/vi/Mzd_csVpjys/hqdefault.jpg" width="400">](https://youtu.be/Mzd_csVpjys)
-[<img src="https://img.youtube.com/vi/E-F2VVYVHFQ/hqdefault.jpg" width="400">](https://youtu.be/E-F2VVYVHFQ)
+
+
+https://user-images.githubusercontent.com/11647217/201716221-94fb20ec-0947-4ea0-b83e-572ffa9a46b5.mp4
+
+
+
+<img align="left" src="https://user-images.githubusercontent.com/11647217/201711956-7d2c2f48-8d3c-4c05-9402-9e4115e4b5d7.mp4" width="400"> 
+<img align="left" src="https://user-images.githubusercontent.com/11647217/201712014-decd56ba-16eb-4772-90fb-200d489c309c.mp4" width="400"> 
+
+
+
+
+
+
 
 ## Install
 ```
