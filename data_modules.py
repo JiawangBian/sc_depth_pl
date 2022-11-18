@@ -57,7 +57,7 @@ class VideosDataModule(LightningDataModule):
                 sequence_length=self.hparams.hparams.sequence_length,
                 skip_frames=self.hparams.hparams.skip_frames,
                 use_frame_index=self.hparams.hparams.use_frame_index,
-                with_pseudo_depth=self.load_pseudo_depth
+                with_pseudo_depth=False
             )
         else:
             print("wrong validation mode")

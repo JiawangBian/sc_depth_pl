@@ -86,13 +86,15 @@ class SC_DepthV3(LightningModule):
 
         elif self.hparams.hparams.val_mode == 'photo':
             tgt_img, ref_imgs, intrinsics = batch
+
             tgt_depth = self.depth_net(tgt_img)
             ref_depths = [self.depth_net(im) for im in ref_imgs]
             poses = [self.pose_net(tgt_img, im) for im in ref_imgs]
             poses_inv = [self.pose_net(im, tgt_img) for im in ref_imgs]
-            loss_1, loss_2 = LossF.photo_and_geometry_loss(tgt_img, ref_imgs, tgt_depth, ref_depths,
-                                                        intrinsics, poses, poses_inv)
-            errs = {'photo_loss': loss_1.item(), 'geometry_loss': loss_2.item()}
+
+            loss_1, _, _ = LossF.photo_and_geometry_loss(tgt_img, ref_imgs, tgt_depth, ref_depths,
+                                                           intrinsics, poses, poses_inv, self.hparams.hparams)
+            errs = {'photo_loss': loss_1.item()}
         else:
             print('wrong validation mode')
    
