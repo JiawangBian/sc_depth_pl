@@ -81,13 +81,15 @@ By opening [https://localhost:6006](https://localhost:6006) on your browser, you
 
 ## Train on Your Own Data
 
-You need re-organize your own video datasets according to the above mentioned format for training. Then, you may meet two problems: (1) no ground-truth depth for validation, and (2) hard to choose an appropriate frame rate (FPS) to downsample videos.
+You need re-organize your own video datasets according to the above mentioned format for training. Then, you may meet three problems: (1) no ground-truth depth for validation; (2) hard to choose an appropriate frame rate (FPS) to subsample videos; (3) no pseudo-depth for training V3.
 
-For (1), just add "--val_mode photo" in the training script or the configure file, which uses the photometric loss for validation. 
+### No GT depth for validation
+Just add "--val_mode photo" in the training script or the configure file, which uses the photometric loss for validation. 
 ```bash
 python train.py --config $CONFIG --dataset_dir $DATASET --val_mode photo
 ```
 
+### Subsample video frames (to have sufficient motion) for training 
 For (2), we provide a script ("generate_valid_frame_index.py"), which computes and saves a "frame_index.txt" in each training scene. You can call it by running
 ```bash
 python generate_valid_frame_index.py --dataset_dir $DATASET
@@ -96,6 +98,11 @@ Then, you can add "--use_frame_index" in the training script or the configure fi
 ```bash
 python train.py --config $CONFIG --dataset_dir $DATASET --use_frame_index
 ```
+
+### Generating Pseudo-depth for training V3
+
+We use the [LeReS](https://github.com/aim-uofa/AdelaiDepth/tree/main/LeReS) to generate pseudo-depth in our project. You need to install it and generate pseudo-depth for your images. More specifically, you can refer to the code in [this line](https://github.com/aim-uofa/AdelaiDepth/blob/803abcfc186b5cda73c5ca4c369f350e44a8ae1b/LeReS/Minist_Test/tools/test_shape.py#L134) for saving the pseudo-depth.
+
 
 
 ## Pretrained models
