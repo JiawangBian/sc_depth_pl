@@ -84,13 +84,13 @@ By opening [https://localhost:6006](https://localhost:6006) on your browser, you
 You need re-organize your own video datasets according to the above mentioned format for training. Then, you may meet three problems: (1) no ground-truth depth for validation; (2) hard to choose an appropriate frame rate (FPS) to subsample videos; (3) no pseudo-depth for training V3.
 
 ### No GT depth for validation
-Just add "--val_mode photo" in the training script or the configure file, which uses the photometric loss for validation. 
+Add "--val_mode photo" in the training script or the configure file, which uses the photometric loss for validation. 
 ```bash
 python train.py --config $CONFIG --dataset_dir $DATASET --val_mode photo
 ```
 
 ### Subsample video frames (to have sufficient motion) for training 
-For (2), we provide a script ("generate_valid_frame_index.py"), which computes and saves a "frame_index.txt" in each training scene. You can call it by running
+We provide a script ("generate_valid_frame_index.py"), which computes and saves a "frame_index.txt" in each training scene. It uses the opencv-based optical flow method to compute the camera shift in consecutive frames. You might need to change the parameters for detecting sufficient keypoints in your images if necessary (usually you do not need). Once you prepare your dataset as the above-mentioned format, you can call it by running
 ```bash
 python generate_valid_frame_index.py --dataset_dir $DATASET
 ```
@@ -101,13 +101,15 @@ python train.py --config $CONFIG --dataset_dir $DATASET --use_frame_index
 
 ### Generating Pseudo-depth for training V3
 
-We use the [LeReS](https://github.com/aim-uofa/AdelaiDepth/tree/main/LeReS) to generate pseudo-depth in our project. You need to install it and generate pseudo-depth for your images. More specifically, you can refer to the code in [this line](https://github.com/aim-uofa/AdelaiDepth/blob/803abcfc186b5cda73c5ca4c369f350e44a8ae1b/LeReS/Minist_Test/tools/test_shape.py#L134) for saving the pseudo-depth.
+We use the [LeReS](https://github.com/aim-uofa/AdelaiDepth/tree/main/LeReS) to generate pseudo-depth in this project. You need to install it and generate pseudo-depth for your own images (the pseudo-depth for standard datasets have been provided above). More specifically, you can refer to the code in [this line](https://github.com/aim-uofa/AdelaiDepth/blob/803abcfc186b5cda73c5ca4c369f350e44a8ae1b/LeReS/Minist_Test/tools/test_shape.py#L134) for saving the pseudo-depth.
 
+Besides, it is also possible to use other state-of-the-art monocular depth estimation models to generate psuedo-depth, such as [DPT](https://github.com/isl-org/DPT).
 
 
 ## Pretrained models
 
 [**[Models]**](https://1drv.ms/u/s!AiV6XqkxJHE2mULfSmi4yy-_JHSm?e=s97YRM) 
+
 You need uncompress and put it into "ckpts" folder. Then you can run "scripts/run_test.sh" or "scripts/run_inference.sh" with the pretrained model. 
 
 For v1, we provide models trained on KITTI and DDAD.
@@ -117,16 +119,14 @@ For v2, we provide models trained on NYUv2.
 For v3, we provide models trained on KITTI, NYUv2, DDAD, BONN, and TUM.
 
 
-
-## Testing
+## Testing (Evaluation on Full Images)
 
 We provide the script ("scripts/run_test.sh"), which shows how to test on kitti, nyu, and ddad datasets. The script only evaluates depth accuracy on full images. See the next section for an evaluation of depth estimation on dynamic/static regions, separately.
 
     python test.py --config $CONFIG --dataset_dir $DATASET --ckpt_path $CKPT
     
-## Inference
 
-We provide a bash script ("scripts/run_inference.sh"), which shows how to save the predicted depth (.npy) and visualization images (.jpg) on the DDAD testing dataset. 
+## Demo
 
 A simple demo is given here. You can put your images in "demo/input/" folder and run
 ```bash
@@ -141,7 +141,18 @@ You will see the results saved in "demo/output/" folder.
 
 ## Evaluation on dynamic/static regions
 
-We provide a bash script ("scripts/run_evaluation.sh"), which shows how to evaluate on the DDAD dataset. You must run ("scripts/run_inference.sh") to save the depth estimation results before running evaluation.
+You need to use ("scripts/run_inference.sh") firstly to save the predicted depth, and then you can use the ("scripts/run_evaluation.sh") for doing evaluation. A demo on DDAD dataset is provided in these files. Generally, you need do
+
+### Inference
+```bash
+python inference.py --config $YOUR_CONFIG \
+--input_dir $TESTING_IMAGE_FOLDER \
+--output_dir $RESULTS_FOLDER \
+--ckpt_path $YOUR_CKPT \
+--save-vis --save-depth
+```
+
+### Evaluation
 ```bash
 python eval_depth.py \
 --dataset $DATASET_FOLDER \
