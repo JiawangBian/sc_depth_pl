@@ -1,6 +1,6 @@
 import torch.utils.data as data
 import numpy as np
-from imageio.v2 import imread
+from imageio import imread
 from path import Path
 import torch
 from scipy import sparse
@@ -17,9 +17,9 @@ def crawl_folders(folders_list, dataset='nyu'):
     depths = []
     for folder in folders_list:
         current_imgs = sorted(folder.files('*.jpg'))
-        if dataset == 'nyu':
+        if dataset in ['nyu', 'bonn', 'tum']:
             current_depth = sorted((folder/'depth/').files('*.png'))
-        elif dataset == 'ddad' or dataset == 'kitti':
+        elif dataset in ['ddad', 'kitti']:
             current_depth = sorted((folder/'depth/').files('*.npz'))
         imgs.extend(current_imgs)
         depths.extend(current_depth)
@@ -29,11 +29,14 @@ def crawl_folders(folders_list, dataset='nyu'):
 class ValidationSet(data.Dataset):
     """A sequence data loader where the files are arranged in this way:
         root/scene_1/0000000.jpg
-        root/scene_1/depth/0000000.npy or 0000000.npz or 0000000.png
+        root/scene_1/0000000.npy
+        root/scene_1/0000001.jpg
+        root/scene_1/0000001.npy
         ..
         root/scene_2/0000000.jpg
-        root/scene_2/depth/0000000.npy or 0000000.npz or 0000000.png
+        root/scene_2/0000000.npy
         .
+
         transform functions must take in a list a images and a numpy array which can be None
     """
 
@@ -49,10 +52,13 @@ class ValidationSet(data.Dataset):
     def __getitem__(self, index):
         img = imread(self.imgs[index]).astype(np.float32)
 
-        if self.dataset == 'nyu':
+        if self.dataset in ['nyu']:
             depth = torch.from_numpy(
                 imread(self.depth[index]).astype(np.float32)).float()/5000
-        elif self.dataset == 'kitti' or self.dataset == 'ddad':
+        if self.dataset in ['bonn', 'tum']:
+            depth = torch.from_numpy(
+                imread(self.depth[index]).astype(np.float32)).float()/1000
+        elif self.dataset in ['kitti', 'ddad']:
             depth = torch.from_numpy(load_sparse_depth(
                 self.depth[index]).astype(np.float32))
 

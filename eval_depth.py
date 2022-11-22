@@ -115,9 +115,9 @@ class DepthEval():
             pred_depths[i] = np.load(pred_depths[i])
 
             # load gt depth
-            if args.dataset in ['nyu', 'tum']:
+            if args.dataset in ['nyu']:
                 gt_depths[i] = imread(gt_depths[i]).astype(np.float32) / 5000
-            elif args.dataset in ['scannet', 'bonn']:
+            elif args.dataset in ['scannet', 'bonn', 'tum']:
                 gt_depths[i] = imread(gt_depths[i]).astype(np.float32) / 1000
             elif args.dataset == 'kitti':
                 gt_depths[i] = np.load(gt_depths[i])

@@ -216,6 +216,16 @@ def compute_errors(gt, pred, dataset):
         crop_mask[:, :] = 1
         max_depth = 200
 
+    if dataset == 'bonn':
+        crop_mask = gt[0] != gt[0]
+        crop_mask[:, :] = 1
+        max_depth = 10
+
+    if dataset == 'tum':
+        crop_mask = gt[0] != gt[0]
+        crop_mask[:, :] = 1
+        max_depth = 10
+
     min_depth = 0.1
     for current_gt, current_pred in zip(gt, pred):
         valid = (current_gt > min_depth) & (current_gt < max_depth)
