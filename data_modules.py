@@ -37,6 +37,7 @@ class VideosDataModule(LightningDataModule):
 
         self.train_dataset = TrainFolder(
             self.hparams.hparams.dataset_dir,
+            train=True,
             transform=self.train_transform,
             sequence_length=self.hparams.hparams.sequence_length,
             skip_frames=self.hparams.hparams.skip_frames,
@@ -53,6 +54,7 @@ class VideosDataModule(LightningDataModule):
         elif self.hparams.hparams.val_mode == 'photo':
             self.val_dataset = TrainFolder(
                 self.hparams.hparams.dataset_dir,
+                train=False,
                 transform=self.valid_transform,
                 sequence_length=self.hparams.hparams.sequence_length,
                 skip_frames=self.hparams.hparams.skip_frames,

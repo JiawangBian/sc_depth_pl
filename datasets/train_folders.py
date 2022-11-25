@@ -40,6 +40,7 @@ class TrainFolder(data.Dataset):
 
     def __init__(self,
                  root,
+                 train=True,
                  sequence_length=3,
                  transform=None,
                  skip_frames=1,
@@ -49,7 +50,7 @@ class TrainFolder(data.Dataset):
         np.random.seed(0)
         random.seed(0)
         self.root = Path(root)/'training'
-        scene_list_path = self.root/'train.txt'
+        scene_list_path = self.root/'train.txt' if train else self.root/'val.txt'
         self.scenes = [self.root/folder[:-1]
                        for folder in open(scene_list_path)]
         self.transform = transform
