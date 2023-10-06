@@ -10,9 +10,9 @@ In the SC-DepthV2 ([TPMAI 2022](https://arxiv.org/abs/2006.02708v2)), we prove t
 
 <img src="https://jwbian.net/wp-content/uploads/2020/06/vis_depth.png" width="600">
 
-In the SC-DepthV3 ([ArXiv 2022](https://arxiv.org/abs/2211.03660)), we propose a robust learning framework for accurate and sharp monocular depth estimation in (highly) dynamic scenes. As the photometric loss, which is the main loss in the self-supervised methods, is not valid in dynamic object regions and occlusion, previous methods show poor accuracy in dynamic scenes and blurred depth prediction at object boundaries. We propose to leverage an external pretrained depth estimation network for generating the single-image depth prior, based on which we propose effective losses to constrain self-supervised depth learning. The evaluation results on six challenging datasets including both static and dynamic scenes demonstrate the efficacy of the proposed method.
+In the SC-DepthV3 ([TPAMI 2023](https://arxiv.org/abs/2211.03660)), we propose a robust learning framework for accurate and sharp monocular depth estimation in (highly) dynamic scenes. As the photometric loss, which is the main loss in the self-supervised methods, is not valid in dynamic object regions and occlusion, previous methods show poor accuracy in dynamic scenes and blurred depth prediction at object boundaries. We propose to leverage an external pretrained depth estimation network for generating the single-image depth prior, based on which we propose effective losses to constrain self-supervised depth learning. The evaluation results on six challenging datasets including both static and dynamic scenes demonstrate the efficacy of the proposed method.
 
-Qualatative depth estimation results: DDAD, BONN, TUM, IBIMS-1
+Qualitative depth estimation results: DDAD, BONN, TUM, IBIMS-1
 
 <img src="https://jwbian.net/Demo/vis_ddad.jpg" width="400"> <img src="https://jwbian.net/Demo/vis_bonn.jpg" width="400"> <img src="https://jwbian.net/Demo/vis_tum.jpg" width="400"> <img src="https://jwbian.net/Demo/vis_ibims.jpg" width="400">
 
@@ -176,7 +176,7 @@ python eval_depth.py \
   year={2021} 
 }
 ```
-which is an extension of previous conference version:
+which is an extension of the previous conference version:
 
 **Unsupervised Scale-consistent Depth and Ego-motion Learning from Monocular Video (NeurIPS 2019)** \
 *Jia-Wang Bian, Zhichao Li, Naiyan Wang, Huangying Zhan, Chunhua Shen, Ming-Ming Cheng, Ian Reid* 
@@ -204,7 +204,7 @@ which is an extension of previous conference version:
 ```
 
 #### SC-DepthV3:
-**SC-DepthV3: Robust Self-supervised Monocular Depth Estimation for Dynamic Scenes (ArXiv 2022)** \
+**SC-DepthV3: Robust Self-supervised Monocular Depth Estimation for Dynamic Scenes (TPAMI 2023)** \
 *Libo Sun\*, Jia-Wang Bian\*, Huangying Zhan, Wei Yin, Ian Reid, Chunhua Shen*
 [**[paper]**](https://arxiv.org/abs/2211.03660) \
 \* denotes equal contribution and joint first author
@@ -212,7 +212,7 @@ which is an extension of previous conference version:
 @article{sc_depthv3, 
   title={SC-DepthV3: Robust Self-supervised Monocular Depth Estimation for Dynamic Scenes}, 
   author={Sun, Libo and Bian, Jia-Wang and Zhan, Huangying and Yin, Wei and Reid, Ian and Shen, Chunhua}, 
-  journal= {arXiv:2211.03660}, 
-  year={2022} 
+  journal= {IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI)}, 
+  year={2023} 
 }
 ```
